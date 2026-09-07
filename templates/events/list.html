@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Events — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Events</h1>
+    <p class="font-body text-white/70 mt-3">Join us — see what's coming up.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="font-heading text-2xl text-navy mb-8">Upcoming Events</h2>
+
+    {% if upcoming_events %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {% for event in upcoming_events %}
+          <a href="{% url 'events:detail' event.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            {% if event.image %}
+              <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-44 object-cover">
+            {% else %}
+              <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-sm text-navy/40">No image</span>
+              </div>
+            {% endif %}
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <div class="bg-navy text-white rounded px-2.5 py-1 text-center leading-tight">
+                  <p class="font-body text-[10px] uppercase">{{ event.event_date|date:"M" }}</p>
+                  <p class="font-heading text-sm">{{ event.event_date|date:"d" }}</p>
+                </div>
+                <p class="font-body text-xs text-navy/50">{{ event.start_time|time:"g:i A" }}</p>
+              </div>
+              <h3 class="font-heading text-lg text-navy mb-1">{{ event.title }}</h3>
+              {% if event.location %}<p class="font-body text-sm text-navy/50">{{ event.location }}</p>{% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="flex justify-center gap-4 mb-16 font-body text-sm">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="text-navy hover:text-gold-dark">&larr; Previous</a>
+          {% endif %}
+          <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="text-navy hover:text-gold-dark">Next &rarr;</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="font-body text-navy/50 py-6 mb-16">No upcoming events right now — check back soon.</p>
+    {% endif %}
+
+    {% if past_events %}
+      <h2 class="font-heading text-2xl text-navy mb-8">Past Events</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for event in past_events %}
+          <a href="{% url 'events:detail' event.slug %}" class="block bg-white border border-navy/10 rounded-lg p-5 hover:shadow-sm transition-shadow opacity-80">
+            <p class="font-body text-xs text-navy/50 mb-1">{{ event.event_date|date:"M j, Y" }}</p>
+            <h3 class="font-heading text-base text-navy">{{ event.title }}</h3>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

@@ -1,5 +1,7 @@
+from django.utils import timezone
 from django.views.generic import TemplateView
 
+from apps.events.models import Event
 from apps.ministries.models import Ministry
 from apps.sermons.models import Sermon
 
@@ -16,9 +18,11 @@ class HomeView(TemplateView):
 
         content = context["homepage_content"]
 
-        if content.show_ministries_section:
-            featured = Ministry.objects.filter(is_active=True, is_featured=True)
-            context["preview_ministries"] = featured if featured.exists() else Ministry.objects.filter(is_active=True)[:6]
+        if content.show_events_section:
+            context["upcoming_events"] = (
+                Event.objects.filter(is_published=True, event_date__gte=timezone.localdate())
+                .order_by("event_date", "start_time")[:3]
+            )
 
         if content.show_sermons_section:
             context["latest_sermons"] = (
@@ -26,5 +30,9 @@ class HomeView(TemplateView):
                 .select_related("speaker")
                 .order_by("-date_delivered")[:3]
             )
+
+        if content.show_ministries_section:
+            featured = Ministry.objects.filter(is_active=True, is_featured=True)
+            context["preview_ministries"] = featured if featured.exists() else Ministry.objects.filter(is_active=True)[:6]
 
         return context

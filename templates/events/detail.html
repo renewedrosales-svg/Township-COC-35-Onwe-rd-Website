@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }} — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ event.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <a href="{% url 'events:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All Events</a>
+
+    {% if event.is_past %}
+      <p class="inline-block mt-4 mb-2 font-body text-xs uppercase tracking-wide bg-navy/10 text-navy/60 px-3 py-1 rounded-full">Past Event</p>
+    {% endif %}
+
+    <h1 class="font-heading text-4xl text-navy mt-2 mb-6">{{ event.title }}</h1>
+
+    {% if event.image %}
+      <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-80 object-cover rounded-lg mb-8">
+    {% endif %}
+
+    <div class="bg-cream rounded-lg p-6 space-y-2 mb-8">
+      <p class="font-body text-sm text-navy/70">
+        <strong>Date:</strong> {{ event.event_date|date:"l, F j, Y" }}
+      </p>
+      <p class="font-body text-sm text-navy/70">
+        <strong>Time:</strong> {{ event.start_time|time:"g:i A" }}{% if event.end_time %} – {{ event.end_time|time:"g:i A" }}{% endif %}
+      </p>
+      {% if event.location %}<p class="font-body text-sm text-navy/70"><strong>Location:</strong> {{ event.location }}</p>{% endif %}
+      {% if event.organizer %}<p class="font-body text-sm text-navy/70"><strong>Organized by:</strong> {{ event.organizer }}</p>{% endif %}
+    </div>
+
+    {% if event.description %}
+      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-8">{{ event.description }}</p>
+    {% endif %}
+
+    {% if event.registration_info %}
+      <div class="border border-gold/40 bg-gold/5 rounded-lg p-5 mb-8">
+        <p class="font-body text-sm text-navy/80 whitespace-pre-line">{{ event.registration_info }}</p>
+      </div>
+    {% endif %}
+
+    {% if event.external_link %}
+      <a href="{{ event.external_link }}" target="_blank" rel="noopener noreferrer"
+         class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-6 py-3 rounded-full hover:bg-gold-dark transition-colors">
+        More Info / Register →
+      </a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

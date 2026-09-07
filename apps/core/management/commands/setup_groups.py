@@ -27,6 +27,7 @@ GROUP_PERMISSIONS = {
         "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
         "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
+        "events.add_event", "events.change_event", "events.delete_event",
     ],
     "Church Admin": [
         "church_settings.change_churchsettings",
@@ -39,6 +40,7 @@ GROUP_PERMISSIONS = {
         "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
         "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
+        "events.add_event", "events.change_event", "events.delete_event",
     ],
     "Minister": [
         # Ministers CAN add/change/delete sermons at the permission
