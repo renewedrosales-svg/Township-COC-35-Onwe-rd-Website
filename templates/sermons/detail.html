@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load sermon_extras %}
+{% block title %}{{ sermon.title }} — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ sermon.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <a href="{% url 'sermons:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All Teachings</a>
+
+    <h1 class="font-heading text-4xl text-navy mt-4 mb-2">{{ sermon.title }}</h1>
+    <p class="font-body text-navy/60 mb-8">
+      {% if sermon.speaker %}{{ sermon.speaker.full_name }} · {% endif %}{{ sermon.date_delivered|date:"F j, Y" }}
+      {% if sermon.scripture_reference %} · {{ sermon.scripture_reference }}{% endif %}
+    </p>
+
+    {% with embed_url=sermon.video_url|embeddable_video_url %}
+      {% if embed_url %}
+        <div class="aspect-video mb-8 rounded-lg overflow-hidden">
+          <iframe src="{{ embed_url }}" class="w-full h-full" frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+        </div>
+      {% elif sermon.video_url %}
+        <a href="{{ sermon.video_url }}" target="_blank" rel="noopener noreferrer"
+           class="inline-block mb-8 font-body text-sm text-gold-dark hover:underline">
+          Watch this teaching (opens in a new tab) →
+        </a>
+      {% endif %}
+    {% endwith %}
+
+    {% if sermon.audio_file %}
+      <audio controls class="w-full mb-8">
+        <source src="{{ sermon.audio_file.url }}">
+        Your browser does not support audio playback.
+      </audio>
+    {% endif %}
+
+    {% if sermon.description %}
+      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-8">{{ sermon.description }}</p>
+    {% endif %}
+
+    {% if sermon.notes_pdf %}
+      <a href="{{ sermon.notes_pdf.url }}" download
+         class="inline-flex items-center gap-2 bg-navy text-white font-body font-semibold px-6 py-3 rounded-full hover:bg-navy-light transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v12m0 0 4-4m-4 4-4-4M4 20h16"/>
+        </svg>
+        Download Sermon Notes (PDF)
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+{% if recent_sermons %}
+<section class="bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="font-heading text-2xl text-navy mb-8">More Teachings</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {% for s in recent_sermons %}
+        <a href="{% url 'sermons:detail' s.slug %}" class="block bg-white rounded-lg p-5 hover:shadow-md transition-shadow">
+          <p class="font-body text-xs text-navy/50 mb-1">{{ s.date_delivered|date:"M j, Y" }}</p>
+          <h3 class="font-heading text-base text-navy">{{ s.title }}</h3>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

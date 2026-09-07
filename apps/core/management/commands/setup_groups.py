@@ -13,6 +13,7 @@ from django.core.management.base import BaseCommand
 # Any codename listed here that doesn't exist yet (because its app has
 # no models yet) is skipped with a warning, not a crash — this lets the
 # command stay accurate as the single RBAC reference even mid-project.
+
 GROUP_PERMISSIONS = {
     "Super Admin": [
         "accounts.manage_administrators",
@@ -24,6 +25,8 @@ GROUP_PERMISSIONS = {
         "pages.change_aboutpagecontent",
         "ministries.add_leader", "ministries.change_leader", "ministries.delete_leader",
         "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
+        "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
+        "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
     ],
     "Church Admin": [
         "church_settings.change_churchsettings",
@@ -34,11 +37,16 @@ GROUP_PERMISSIONS = {
         "pages.change_aboutpagecontent",
         "ministries.add_leader", "ministries.change_leader", "ministries.delete_leader",
         "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
-        # Deliberately excludes "accounts.manage_administrators" — §7.
+        "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
+        "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
     ],
     "Minister": [
-        # Still empty — sermons phase (7) is where this group first gets
-        # real permissions (scoped to their own sermons only).
+        # Ministers CAN add/change/delete sermons at the permission
+        # level — the restriction to "their own only" is enforced by
+        # OwnerOrElevatedRequiredMixin / admin get_queryset above, not
+        # by Django's permission system (which can't express per-object
+        # ownership, as noted back in Phase 3 Step 2).
+        "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
     ],
 }
 

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Teachings — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Teachings</h1>
+    <p class="font-body text-white/70 mt-3">Be inspired by messages from God's Word.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <form method="get" class="flex flex-col sm:flex-row gap-4 mb-10">
+      <input type="text" name="q" value="{{ current_query }}" placeholder="Search teachings..."
+             class="flex-1 border border-navy/20 rounded-full px-5 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+      <select name="category" class="border border-navy/20 rounded-full px-5 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+        <option value="">All Categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat.slug }}" {% if cat.slug == current_category %}selected{% endif %}>{{ cat.name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="bg-gold text-navy-dark font-body font-semibold px-6 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+        Search
+      </button>
+    </form>
+
+    {% if sermons %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for sermon in sermons %}
+          <a href="{% url 'sermons:detail' sermon.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            {% if sermon.thumbnail %}
+              <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" class="w-full h-44 object-cover">
+            {% else %}
+              <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-sm text-navy/40">No thumbnail</span>
+              </div>
+            {% endif %}
+            <div class="p-5">
+              {% if sermon.speaker %}<p class="font-body text-xs text-gold-dark mb-1">{{ sermon.speaker.full_name }} · {{ sermon.date_delivered|date:"M j, Y" }}</p>{% endif %}
+              <h3 class="font-heading text-lg text-navy mb-1">{{ sermon.title }}</h3>
+              {% if sermon.scripture_reference %}<p class="font-body text-xs text-navy/50 mb-2">{{ sermon.scripture_reference }}</p>{% endif %}
+              {% if sermon.description %}<p class="font-body text-sm text-navy/60">{{ sermon.description|truncatewords:16 }}</p>{% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="flex justify-center gap-4 mt-12 font-body text-sm">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="text-navy hover:text-gold-dark">&larr; Previous</a>
+          {% endif %}
+          <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}" class="text-navy hover:text-gold-dark">Next &rarr;</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="font-body text-navy/50 text-center py-12">No teachings found{% if current_query %} for "{{ current_query }}"{% endif %}.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

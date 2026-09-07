@@ -18,7 +18,7 @@
       <nav class="hidden lg:flex items-center gap-8 font-body text-sm">
         <a href="{% url 'pages:about' %}" class="hover:text-gold transition-colors">About Us</a>
         <a href="{% url 'ministries:list' %}" class="hover:text-gold transition-colors">Ministries</a>
-        <a href="#" class="hover:text-gold transition-colors">Sermons</a>
+        <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
         <a href="#" class="hover:text-gold transition-colors">Events</a>
         <a href="#" class="hover:text-gold transition-colors">News</a>
         <a href="#" class="hover:text-gold transition-colors">Gallery</a>
@@ -54,7 +54,7 @@
     style="display:none;">
     <a href="{% url 'pages:about' %}" class="hover:text-gold transition-colors">About Us</a>
     <a href="{% url 'ministries:list' %}" class="hover:text-gold transition-colors">Ministries</a>
-    <a href="#" class="hover:text-gold transition-colors">Sermons</a>
+    <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
     <a href="#" class="hover:text-gold transition-colors">Events</a>
     <a href="#" class="hover:text-gold transition-colors">News</a>
     <a href="#" class="hover:text-gold transition-colors">Gallery</a>

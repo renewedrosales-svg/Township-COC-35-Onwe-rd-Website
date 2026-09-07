@@ -17,11 +17,11 @@ urlpatterns = [
 
     path("", include("apps.homepage.urls")),
     path("ministries/", include("apps.ministries.urls")),
+    path("teachings/", include("apps.sermons.urls")),
 
-    # IMPORTANT: pages.urls must stay LAST among content routes — its
-    # "<slug:slug>/" pattern is a catch-all. Every future app (sermons/,
-    # events/, news/, gallery/, contact/, school/) gets added ABOVE this
-    # line as it's built, never below it.
+    # pages.urls MUST stay LAST — catch-all "<slug:slug>/" pattern.
+    # events/, news/, gallery/, contact/, school/ all get added ABOVE
+    # this line in their own phases.
     path("", include("apps.pages.urls")),
 ]
 

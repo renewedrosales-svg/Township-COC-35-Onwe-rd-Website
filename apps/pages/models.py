@@ -8,8 +8,8 @@ from apps.core.validators import validate_image_file
 
 RESERVED_SLUGS = {
     "admin", "dashboard", "login", "logout", "health", "static", "media",
-    "about", "ministries", "sermons", "events", "news", "gallery",
-    "contact", "school",
+    "about", "ministries", "sermons", "teachings", "events", "news",
+    "gallery", "contact", "school",
 }
 
 
