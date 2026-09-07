@@ -1,0 +1,31 @@
+<section class="bg-cream">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">Our Ministries</p>
+    <h2 class="font-heading text-3xl sm:text-4xl text-navy mb-3">Find Your Place</h2>
+    <p class="font-body text-navy/60 max-w-xl mx-auto mb-12">
+      We have a ministry for every age and stage of life. Come and get involved!
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8">
+      {% for ministry in preview_ministries %}
+        <a href="{% url 'ministries:detail' ministry.slug %}" class="group flex flex-col items-center">
+          <div class="w-16 h-16 rounded-full bg-navy text-white flex items-center justify-center mb-3 group-hover:bg-gold group-hover:text-navy-dark transition-colors">
+            {% if ministry.image %}
+              <img src="{{ ministry.image.url }}" alt="" class="w-full h-full rounded-full object-cover">
+            {% else %}
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a4 4 0 0 0-10 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>
+              </svg>
+            {% endif %}
+          </div>
+          <span class="font-body text-sm font-medium text-navy group-hover:text-gold-dark transition-colors">{{ ministry.name }}</span>
+        </a>
+      {% endfor %}
+    </div>
+
+    <a href="{% url 'ministries:list' %}"
+       class="inline-flex items-center gap-2 mt-12 font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors">
+      View All Ministries →
+    </a>
+  </div>
+</section>

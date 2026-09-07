@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ ministry.name }} — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <a href="{% url 'ministries:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All Ministries</a>
+    <h1 class="font-heading text-4xl text-navy mt-4 mb-2">{{ ministry.name }}</h1>
+    {% if ministry.leader %}<p class="font-body text-navy/60 mb-6">Led by {{ ministry.leader.full_name }}</p>{% endif %}
+
+    {% if ministry.image %}
+      <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" class="w-full h-80 object-cover rounded-lg mb-8">
+    {% endif %}
+
+    {% if ministry.description %}
+      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-8">{{ ministry.description }}</p>
+    {% endif %}
+
+    <div class="bg-cream rounded-lg p-6 space-y-2">
+      {% if ministry.meeting_info %}<p class="font-body text-sm text-navy/70"><strong>Meets:</strong> {{ ministry.meeting_info }}</p>{% endif %}
+      {% if ministry.contact_email %}<p class="font-body text-sm text-navy/70"><strong>Email:</strong> {{ ministry.contact_email }}</p>{% endif %}
+      {% if ministry.contact_phone %}<p class="font-body text-sm text-navy/70"><strong>Phone:</strong> {{ ministry.contact_phone }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

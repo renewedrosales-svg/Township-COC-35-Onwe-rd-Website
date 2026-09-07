@@ -16,6 +16,13 @@ urlpatterns = [
     path("dashboard/", include("apps.dashboard.urls")),
 
     path("", include("apps.homepage.urls")),
+    path("ministries/", include("apps.ministries.urls")),
+
+    # IMPORTANT: pages.urls must stay LAST among content routes — its
+    # "<slug:slug>/" pattern is a catch-all. Every future app (sermons/,
+    # events/, news/, gallery/, contact/, school/) gets added ABOVE this
+    # line as it's built, never below it.
+    path("", include("apps.pages.urls")),
 ]
 
 if settings.DEBUG:

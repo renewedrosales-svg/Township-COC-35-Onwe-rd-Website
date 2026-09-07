@@ -19,12 +19,15 @@
     {% include "homepage/sections/service_times.html" %}
   {% endif %}
 
+  {% if homepage_content.show_ministries_section %}
+    {% include "homepage/sections/ministries.html" %}
+  {% endif %}
+
   {% comment %}
     Sections below are wired but intentionally not yet enabled —
     each becomes active as its owning app is completed:
       Events        → Phase 8   (show_events_section)
       Sermons       → Phase 7   (show_sermons_section)
-      Ministries    → Phase 6   (show_ministries_section)
       News          → Phase 9   (show_news_section)
       Gallery       → Phase 10  (show_gallery_section)
       School        → Phase 13  (show_school_section)

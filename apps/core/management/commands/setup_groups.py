@@ -16,25 +16,29 @@ from django.core.management.base import BaseCommand
 GROUP_PERMISSIONS = {
     "Super Admin": [
         "accounts.manage_administrators",
-        # Content permissions accumulate here as each app is built:
-        # "church_settings.change_churchsettings",
-        # "homepage.add_homepagesection", "homepage.change_homepagesection", ...
-        # "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon", ...
-        # (Super Admin gets full CRUD on everything — added incrementally below
-        #  as models are created; Church Admin's list mirrors most of these
-        #  minus system-level entries.)
+        "church_settings.change_churchsettings",
+        "church_settings.add_servicetime", "church_settings.change_servicetime", "church_settings.delete_servicetime",
+        "homepage.change_homepagecontent",
+        "homepage.add_creeditem", "homepage.change_creeditem", "homepage.delete_creeditem",
+        "pages.add_page", "pages.change_page", "pages.delete_page",
+        "pages.change_aboutpagecontent",
+        "ministries.add_leader", "ministries.change_leader", "ministries.delete_leader",
+        "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
     ],
     "Church Admin": [
-        # Populated starting with the church_settings/homepage/pages phases.
-        # Deliberately does NOT include "accounts.manage_administrators" —
-        # per spec (§7), Church Admins never get system-level authority
-        # even though they manage day-to-day content.
+        "church_settings.change_churchsettings",
+        "church_settings.add_servicetime", "church_settings.change_servicetime", "church_settings.delete_servicetime",
+        "homepage.change_homepagecontent",
+        "homepage.add_creeditem", "homepage.change_creeditem", "homepage.delete_creeditem",
+        "pages.add_page", "pages.change_page", "pages.delete_page",
+        "pages.change_aboutpagecontent",
+        "ministries.add_leader", "ministries.change_leader", "ministries.delete_leader",
+        "ministries.add_ministry", "ministries.change_ministry", "ministries.delete_ministry",
+        # Deliberately excludes "accounts.manage_administrators" — §7.
     ],
     "Minister": [
-        # Populated starting with the sermons phase.
-        # Ministers get "sermons.add_sermon" / "change_sermon" (can act on
-        # sermons at all) — ownership restriction to "their own sermons
-        # only" happens in view logic, not here, as explained above.
+        # Still empty — sermons phase (7) is where this group first gets
+        # real permissions (scoped to their own sermons only).
     ],
 }
 

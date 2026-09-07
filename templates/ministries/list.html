@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Ministries — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Ministries</h1>
+    <p class="font-body text-white/70 mt-3">We have a ministry for every age and stage of life.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    {% if ministries %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for ministry in ministries %}
+          <a href="{% url 'ministries:detail' ministry.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            {% if ministry.image %}
+              <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" class="w-full h-48 object-cover">
+            {% else %}
+              <div class="w-full h-48 bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-sm text-navy/40">No image</span>
+              </div>
+            {% endif %}
+            <div class="p-5">
+              <h3 class="font-heading text-lg text-navy mb-1">{{ ministry.name }}</h3>
+              {% if ministry.leader %}<p class="font-body text-sm text-gold-dark mb-2">Led by {{ ministry.leader.full_name }}</p>{% endif %}
+              {% if ministry.description %}<p class="font-body text-sm text-navy/60">{{ ministry.description|truncatewords:18 }}</p>{% endif %}
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="font-body text-navy/50 text-center">Ministries coming soon.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
