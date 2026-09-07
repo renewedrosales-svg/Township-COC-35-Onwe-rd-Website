@@ -1,0 +1,20 @@
+<section id="visit" class="relative bg-navy-dark text-white">
+  {% if homepage_content.visit_cta_image %}
+    <img src="{{ homepage_content.visit_cta_image.url }}" alt=""
+         class="absolute inset-0 w-full h-full object-cover opacity-25">
+  {% endif %}
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
+    <div class="text-center sm:text-left">
+      <h2 class="font-heading text-2xl sm:text-3xl mb-2">{{ homepage_content.visit_cta_heading }}</h2>
+      {% if homepage_content.visit_cta_description %}
+        <p class="font-body text-white/70">{{ homepage_content.visit_cta_description }}</p>
+      {% endif %}
+    </div>
+    {% if homepage_content.visit_cta_button_text %}
+      <a href="{{ homepage_content.visit_cta_button_url }}"
+         class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3 rounded-full hover:bg-gold-dark transition-colors whitespace-nowrap">
+        {{ homepage_content.visit_cta_button_text }}
+      </a>
+    {% endif %}
+  </div>
+</section>

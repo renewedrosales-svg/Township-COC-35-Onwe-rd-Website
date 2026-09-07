@@ -1,0 +1,29 @@
+<section class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="order-2 lg:order-1">
+      {% if homepage_content.about_eyebrow %}
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">{{ homepage_content.about_eyebrow }}</p>
+      {% endif %}
+      <h2 class="font-heading text-3xl sm:text-4xl text-navy mb-5">{{ homepage_content.about_heading }}</h2>
+      {% if homepage_content.about_description %}
+        <p class="font-body text-navy/70 leading-relaxed mb-8">{{ homepage_content.about_description }}</p>
+      {% endif %}
+      {% if homepage_content.about_cta_text %}
+        <a href="{{ homepage_content.about_cta_url }}"
+           class="inline-flex items-center gap-2 bg-navy text-white font-body font-semibold px-6 py-3 rounded-full hover:bg-navy-light transition-colors">
+          {{ homepage_content.about_cta_text }}
+        </a>
+      {% endif %}
+    </div>
+    <div class="order-1 lg:order-2">
+      {% if homepage_content.about_image %}
+        <img src="{{ homepage_content.about_image.url }}" alt="{{ homepage_content.about_heading }}"
+             class="w-full h-80 sm:h-96 object-cover rounded-lg">
+      {% else %}
+        <div class="w-full h-80 sm:h-96 bg-navy/5 rounded-lg flex items-center justify-center">
+          <span class="font-body text-sm text-navy/40">About image — add in Homepage Content</span>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

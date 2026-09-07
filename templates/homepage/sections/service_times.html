@@ -1,0 +1,22 @@
+<section class="bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">Service Times</p>
+    <h2 class="font-heading text-3xl sm:text-4xl text-navy mb-12">When We Gather</h2>
+
+    {% if active_service_times %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for service in active_service_times %}
+          <div class="bg-white rounded-lg p-6 text-left shadow-sm">
+            <p class="font-heading text-lg text-navy mb-1">{{ service.name }}</p>
+            <p class="font-body text-sm text-navy/60 mb-1">{{ service.get_day_display }} · {{ service.start_time|time:"g:i A" }}{% if service.end_time %} – {{ service.end_time|time:"g:i A" }}{% endif %}</p>
+            {% if service.location %}
+              <p class="font-body text-sm text-navy/50">{{ service.location }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="font-body text-navy/50">Service times coming soon.</p>
+    {% endif %}
+  </div>
+</section>

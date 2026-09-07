@@ -2,37 +2,45 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
 
     <div>
-      <h3 class="font-heading text-lg text-gold mb-3">35 Onwe Road Church of Christ</h3>
-      <p class="font-body text-sm text-white/70">Abakaliki, Ebonyi State</p>
+      <h3 class="font-heading text-lg text-gold mb-3">{{ church_settings.church_name }}</h3>
+      {% if church_settings.footer_short_description %}
+        <p class="font-body text-sm text-white/70">{{ church_settings.footer_short_description }}</p>
+      {% endif %}
     </div>
 
     <div>
       <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Contact</h4>
       <ul class="font-body text-sm text-white/80 space-y-2">
-        <li>Address — to be added in Church Settings</li>
-        <li>Phone — to be added in Church Settings</li>
-        <li>Email — to be added in Church Settings</li>
+        {% if church_settings.address %}<li>{{ church_settings.address }}</li>{% endif %}
+        {% if church_settings.phone_primary %}<li>{{ church_settings.phone_primary }}</li>{% endif %}
+        {% if church_settings.email %}<li>{{ church_settings.email }}</li>{% endif %}
       </ul>
     </div>
 
     <div>
-      <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Quick Links</h4>
+      <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Service Times</h4>
       <ul class="font-body text-sm text-white/80 space-y-2">
-        <li><a href="#" class="hover:text-gold">About Us</a></li>
-        <li><a href="#" class="hover:text-gold">Sermons</a></li>
-        <li><a href="#" class="hover:text-gold">Events</a></li>
-        <li><a href="#" class="hover:text-gold">Contact</a></li>
+        {% for service in active_service_times %}
+          <li>{{ service.name }} — {{ service.get_day_display }} {{ service.start_time|time:"g:i A" }}</li>
+        {% empty %}
+          <li class="text-white/40">Service times not yet added.</li>
+        {% endfor %}
       </ul>
     </div>
 
     <div>
       <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Follow Us</h4>
-      <p class="font-body text-sm text-white/70">Social links — to be added in Church Settings</p>
+      <ul class="flex gap-3">
+        {% if church_settings.facebook_url %}<li><a href="{{ church_settings.facebook_url }}" class="hover:text-gold">Facebook</a></li>{% endif %}
+        {% if church_settings.instagram_url %}<li><a href="{{ church_settings.instagram_url }}" class="hover:text-gold">Instagram</a></li>{% endif %}
+        {% if church_settings.youtube_url %}<li><a href="{{ church_settings.youtube_url }}" class="hover:text-gold">YouTube</a></li>{% endif %}
+        {% if church_settings.whatsapp_url %}<li><a href="{{ church_settings.whatsapp_url }}" class="hover:text-gold">WhatsApp</a></li>{% endif %}
+      </ul>
     </div>
 
   </div>
 
   <div class="border-t border-white/10 py-6 text-center font-body text-xs text-white/50">
-    &copy; {% now "Y" %} 35 Onwe Road Church of Christ, Abakaliki. All rights reserved.
+    &copy; {% now "Y" %} {{ church_settings.church_name }}. All rights reserved.
   </div>
 </footer>

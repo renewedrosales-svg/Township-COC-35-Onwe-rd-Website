@@ -4,13 +4,18 @@
     <div class="flex items-center justify-between h-20">
 
       <a href="{% url 'home' %}" class="flex items-center gap-3">
-        <span class="font-heading text-xl text-gold tracking-wide">
-          35 Onwe Road Church of Christ
-        </span>
+        {% if church_settings.logo %}
+          <img src="{{ church_settings.logo.url }}"
+              alt="{{ church_settings.church_name }}"
+              class="h-12 w-auto">
+        {% else %}
+          <span class="font-heading text-xl text-gold tracking-wide">
+            {{ church_settings.church_name }}
+          </span>
+        {% endif %}
       </a>
 
       <nav class="hidden lg:flex items-center gap-8 font-body text-sm">
-        <a href="{% url 'home' %}" class="hover:text-gold transition-colors">Home</a>
         <a href="#" class="hover:text-gold transition-colors">About Us</a>
         <a href="#" class="hover:text-gold transition-colors">Ministries</a>
         <a href="#" class="hover:text-gold transition-colors">Sermons</a>
@@ -20,7 +25,7 @@
         <a href="#" class="hover:text-gold transition-colors">Contact</a>
       </nav>
 
-      <a href="#"
+      <a href="{% url 'home' %}#visit"
          class="hidden lg:inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
         Visit Us
       </a>
@@ -47,7 +52,6 @@
     @click.outside="mobileOpen = false"
     class="lg:hidden bg-navy-dark px-4 pb-6 pt-2 flex flex-col gap-4 font-body text-sm"
     style="display:none;">
-    <a href="{% url 'home' %}" class="hover:text-gold transition-colors">Home</a>
     <a href="#" class="hover:text-gold transition-colors">About Us</a>
     <a href="#" class="hover:text-gold transition-colors">Ministries</a>
     <a href="#" class="hover:text-gold transition-colors">Sermons</a>

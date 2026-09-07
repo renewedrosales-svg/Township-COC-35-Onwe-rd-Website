@@ -1,8 +1,37 @@
 {% extends "base.html" %}
+
+{% block title %}{{ church_settings.church_name }} — Home{% endblock %}
+{% block meta_description %}{{ church_settings.default_seo_description|default:"A place to worship, grow, and serve — 35 Onwe Road Church of Christ, Abakaliki." }}{% endblock %}
+
 {% block content %}
-<div class="max-w-3xl mx-auto px-4 py-24 text-center">
-  <p class="font-body text-sm uppercase tracking-widest text-gold mb-3">Phase 1 checkpoint</p>
-  <h1 class="font-heading text-4xl text-navy mb-4">Base template is working</h1>
-  <p class="font-body text-navy/70">Navbar, footer, Tailwind, and Alpine are wired up. The real homepage is built in Phase 5.</p>
-</div>
+
+  {% include "homepage/sections/hero.html" %}
+
+  {% if homepage_content.show_creed_section %}
+    {% include "homepage/sections/creed.html" %}
+  {% endif %}
+
+  {% if homepage_content.show_about_section %}
+    {% include "homepage/sections/about.html" %}
+  {% endif %}
+
+  {% if homepage_content.show_service_times_section %}
+    {% include "homepage/sections/service_times.html" %}
+  {% endif %}
+
+  {% comment %}
+    Sections below are wired but intentionally not yet enabled —
+    each becomes active as its owning app is completed:
+      Events        → Phase 8   (show_events_section)
+      Sermons       → Phase 7   (show_sermons_section)
+      Ministries    → Phase 6   (show_ministries_section)
+      News          → Phase 9   (show_news_section)
+      Gallery       → Phase 10  (show_gallery_section)
+      School        → Phase 13  (show_school_section)
+  {% endcomment %}
+
+  {% if homepage_content.show_visit_cta_section %}
+    {% include "homepage/sections/visit_cta.html" %}
+  {% endif %}
+
 {% endblock %}

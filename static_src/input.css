@@ -3,12 +3,30 @@
 @source "../templates";
 @source "../apps";
 
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../static/fonts/PlayfairDisplay-Variable.ttf") format("truetype-variations");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../static/fonts/Inter-Variable.ttf") format("truetype-variations");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-navy: #0f1f3d;
   --color-navy-dark: #0a1529;
+  --color-navy-light: #1c3357;
   --color-gold: #c9a24b;
   --color-gold-dark: #a8843a;
+  --color-cream: #faf8f3;
 
-  --font-heading: "Playfair Display", serif;
-  --font-body: "Inter", sans-serif;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", -apple-system, sans-serif;
 }
