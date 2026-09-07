@@ -16,6 +16,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local apps
+    'apps.core',
+    'apps.accounts',
+    'apps.church_settings',
+    'apps.homepage',
+    'apps.pages',
+    'apps.ministries',
+    'apps.sermons',
+    'apps.events',
+    'apps.news',
+    'apps.gallery',
+    'apps.school',
+    'apps.dashboard',
 ]
 
 MIDDLEWARE = [
@@ -100,3 +114,8 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+AUTH_USER_MODEL = "accounts.User"
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "dashboard:index"
+LOGOUT_REDIRECT_URL = "home"
