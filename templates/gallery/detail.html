@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}{{ album.title }} — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ album.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section class="bg-white" x-data="{ lightboxOpen: false, currentIndex: 0, images: [
+  {% for img in album.images.all %}
+    { url: '{{ img.image.url|escapejs }}', caption: '{{ img.display_alt|escapejs }}' }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+] }">
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <a href="{% url 'gallery:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All Albums</a>
+
+    <h1 class="font-heading text-4xl text-navy mt-4 mb-2">{{ album.title }}</h1>
+    {% if album.event %}<p class="font-body text-navy/50 mb-6">From {{ album.event.title }}</p>{% endif %}
+    {% if album.description %}<p class="font-body text-navy/70 leading-relaxed mb-10 max-w-2xl">{{ album.description }}</p>{% endif %}
+
+    {% if album.images.all %}
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for img in album.images.all %}
+          <button type="button"
+                  @click="lightboxOpen = true; currentIndex = {{ forloop.counter0 }}"
+                  class="block aspect-square rounded-lg overflow-hidden group">
+            <img src="{{ img.image.url }}" alt="{{ img.display_alt }}"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+          </button>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="font-body text-navy/50">No images in this album yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Lightbox -->
+  <div x-show="lightboxOpen"
+       x-cloak
+       @keydown.escape.window="lightboxOpen = false"
+       @keydown.arrow-right.window="currentIndex = (currentIndex + 1) % images.length"
+       @keydown.arrow-left.window="currentIndex = (currentIndex - 1 + images.length) % images.length"
+       class="fixed inset-0 z-60 bg-navy-dark/95 flex items-center justify-center p-4"
+       x-transition.opacity>
+
+    <button type="button" @click="lightboxOpen = false"
+            class="absolute top-6 right-6 text-white/70 hover:text-white" aria-label="Close">
+      <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <button type="button" @click="currentIndex = (currentIndex - 1 + images.length) % images.length"
+            class="absolute left-4 sm:left-8 text-white/70 hover:text-white" aria-label="Previous image">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <div class="max-w-4xl max-h-[80vh] flex flex-col items-center" @click.outside="lightboxOpen = false">
+      <template x-for="(img, index) in images" :key="index">
+        <img :src="img.url" :alt="img.caption" x-show="currentIndex === index"
+             class="max-h-[70vh] w-auto rounded-lg">
+      </template>
+      <p class="font-body text-white/70 text-sm mt-4" x-text="images[currentIndex]?.caption"></p>
+    </div>
+
+    <button type="button" @click="currentIndex = (currentIndex + 1) % images.length"
+            class="absolute right-4 sm:right-8 text-white/70 hover:text-white" aria-label="Next image">
+      <svg class="w-10 h-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+</section>
+{% endblock %}

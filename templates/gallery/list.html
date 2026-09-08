@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Gallery — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Gallery</h1>
+    <p class="font-body text-white/70 mt-3">Moments from our church family.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    {% if albums %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for album in albums %}
+          <a href="{% url 'gallery:detail' album.slug %}" class="block group">
+            <div class="relative rounded-lg overflow-hidden mb-4 aspect-4/3">
+              {% if album.cover_image %}
+                <img src="{{ album.cover_image.image.url }}" alt="{{ album.cover_image.display_alt }}"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              {% else %}
+                <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+                  <span class="font-body text-sm text-navy/40">No images yet</span>
+                </div>
+              {% endif %}
+              <div class="absolute bottom-0 left-0 right-0 bg-linear-to-t from-navy-dark/80 to-transparent p-4">
+                <p class="font-body text-xs text-white/80">{{ album.images.count }} photo{{ album.images.count|pluralize }}</p>
+              </div>
+            </div>
+            <h3 class="font-heading text-lg text-navy group-hover:text-gold-dark transition-colors">{{ album.title }}</h3>
+            {% if album.event %}<p class="font-body text-sm text-navy/50">{{ album.event.title }}</p>{% endif %}
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="flex justify-center gap-4 mt-12 font-body text-sm">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="text-navy hover:text-gold-dark">&larr; Previous</a>
+          {% endif %}
+          <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="text-navy hover:text-gold-dark">Next &rarr;</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="font-body text-navy/50 text-center py-12">No albums published yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

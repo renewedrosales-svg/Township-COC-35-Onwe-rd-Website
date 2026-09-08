@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Support the Church — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}Ways to give and support {{ church_settings.church_name }}.{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">{{ support_content.heading }}</h1>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    {% if support_content.intro_text %}
+      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-10">{{ support_content.intro_text }}</p>
+    {% endif %}
+
+    {% if bank_accounts %}
+      <div class="space-y-6">
+        {% for account in bank_accounts %}
+          <div class="bg-cream rounded-lg p-6">
+            <p class="font-heading text-lg text-navy mb-3">{{ account.label }}</p>
+            <div class="font-body text-sm text-navy/80 space-y-1">
+              <p><strong>Bank:</strong> {{ account.bank_name }}</p>
+              <p><strong>Account Name:</strong> {{ account.account_name }}</p>
+              <p><strong>Account Number:</strong> {{ account.account_number }}</p>
+              {% if account.additional_info %}<p class="text-navy/60 mt-2">{{ account.additional_info }}</p>{% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="font-body text-navy/50">Giving details coming soon — please contact the church office.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

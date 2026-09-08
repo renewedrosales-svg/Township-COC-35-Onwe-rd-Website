@@ -29,4 +29,9 @@
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, sans-serif;
+  
+}
+
+[x-cloak] {
+  display: none !important;
 }

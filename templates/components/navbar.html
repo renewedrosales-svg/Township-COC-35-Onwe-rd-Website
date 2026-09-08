@@ -21,13 +21,13 @@
         <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
         <a href="{% url 'events:list' %}" class="hover:text-gold transition-colors">Events</a>
         <a href="{% url 'news:list' %}" class="hover:text-gold transition-colors">News</a>
-        <a href="#" class="hover:text-gold transition-colors">Gallery</a>
-        <a href="#" class="hover:text-gold transition-colors">Contact</a>
+        <a href="{% url 'gallery:list' %}" class="hover:text-gold transition-colors">Gallery</a>
+        <a href="{% url 'pages:contact' %}" class="hover:text-gold transition-colors">Contact</a>
       </nav>
 
-      <a href="{% url 'home' %}#visit"
-         class="hidden lg:inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
-        Visit Us
+      <a href="{% url 'pages:support' %}"
+        class="hidden lg:inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+        Support
       </a>
 
       <button
@@ -57,10 +57,10 @@
     <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
     <a href="{% url 'events:list' %}" class="hover:text-gold transition-colors">Events</a>
     <a href="{% url 'news:list' %}" class="hover:text-gold transition-colors">News</a>
-    <a href="#" class="hover:text-gold transition-colors">Gallery</a>
-    <a href="#" class="hover:text-gold transition-colors">Contact</a>
-    <a href="#" class="mt-2 inline-flex justify-center bg-gold text-navy-dark font-semibold px-5 py-2.5 rounded-full">
-      Visit Us
+    <a href="{% url 'gallery:list' %}" class="hover:text-gold transition-colors">Gallery</a>
+    <a href="{% url 'pages:contact' %}" class="hover:text-gold transition-colors">Contact</a>
+    <a href="{% url 'pages:support' %}" class="mt-2 inline-flex justify-center bg-gold text-navy-dark font-semibold px-5 py-2.5 rounded-full">
+      Support
     </a>
   </nav>
 </header>

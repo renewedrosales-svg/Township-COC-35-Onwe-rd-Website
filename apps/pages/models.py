@@ -9,7 +9,7 @@ from apps.core.validators import validate_image_file
 RESERVED_SLUGS = {
     "admin", "dashboard", "login", "logout", "health", "static", "media",
     "about", "ministries", "sermons", "teachings", "events", "news",
-    "gallery", "contact", "school",
+    "gallery", "contact", "school", "support",
 }
 
 
@@ -89,3 +89,55 @@ class AboutPageContent(SingletonModel):
 
     def __str__(self):
         return "About Page Content"
+
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    phone = models.CharField(max_length=50, blank=True)
+    subject = models.CharField(max_length=200, blank=True)
+    message = models.TextField()
+
+    submitted_ip = models.GenericIPAddressField(null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} — {self.subject or 'No subject'}"
+
+
+class SupportPageContent(SingletonModel):
+    heading = models.CharField(max_length=200, blank=True, default="Support the Church")
+    intro_text = models.TextField(
+        blank=True,
+        help_text="Explain how giving supports the church's work — shown above the account details.",
+    )
+
+    class Meta:
+        verbose_name = "Support Page Content"
+        verbose_name_plural = "Support Page Content"
+
+    def __str__(self):
+        return "Support Page Content"
+
+
+class BankAccount(models.Model):
+    support_content = models.ForeignKey(
+        SupportPageContent, on_delete=models.CASCADE, related_name="bank_accounts",
+    )
+    label = models.CharField(max_length=100, help_text="e.g. 'General Offering', 'Building Fund'")
+    bank_name = models.CharField(max_length=150)
+    account_name = models.CharField(max_length=200)
+    account_number = models.CharField(max_length=50)
+    additional_info = models.CharField(max_length=255, blank=True, help_text="e.g. mobile money details, or a note.")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order", "label"]
+
+    def __str__(self):
+        return f"{self.label} — {self.bank_name}"

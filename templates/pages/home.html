@@ -35,10 +35,13 @@
     {% include "homepage/sections/church_news.html" %}
   {% endif %}
 
+  {% if homepage_content.show_gallery_section %}
+    {% include "homepage/sections/gallery_preview.html" %}
+  {% endif %}
+
   {% comment %}
     Sections below are wired but intentionally not yet enabled —
     each becomes active as its owning app is completed:
-      Gallery       → Phase 10  (show_gallery_section)
       School        → Phase 13  (show_school_section)
   {% endcomment %}
 

@@ -4,6 +4,8 @@ from apps.core.audit import log_action
 
 from .models import AboutPageContent, Page
 
+from .models import AboutPageContent, BankAccount, ContactMessage, Page, SupportPageContent
+
 
 @admin.register(Page)
 class PageAdmin(admin.ModelAdmin):
@@ -33,6 +35,39 @@ class AboutPageContentAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return not AboutPageContent.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        log_action(request.user, "update", obj)
+
+
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("name", "email", "subject", "created_at", "is_read")
+    list_filter = ("is_read",)
+    list_editable = ("is_read",)
+    search_fields = ("name", "email", "subject", "message")
+    readonly_fields = ("name", "email", "phone", "subject", "message", "submitted_ip", "created_at")
+
+    def has_add_permission(self, request):
+        return False  # only ever created via the public form, never fabricated in admin
+
+
+class BankAccountInline(admin.TabularInline):
+    model = BankAccount
+    extra = 1
+
+
+@admin.register(SupportPageContent)
+class SupportPageContentAdmin(admin.ModelAdmin):
+    fields = ("heading", "intro_text")
+    inlines = [BankAccountInline]
+
+    def has_add_permission(self, request):
+        return not SupportPageContent.objects.exists()
 
     def has_delete_permission(self, request, obj=None):
         return False

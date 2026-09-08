@@ -28,8 +28,14 @@ GROUP_PERMISSIONS = {
         "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
         "events.add_event", "events.change_event", "events.delete_event", "news.add_newscategory", "news.change_newscategory", "news.delete_newscategory",
-"news.add_article", "news.change_article", "news.delete_article",
+    "news.add_article", "news.change_article", "news.delete_article",
+    "gallery.add_galleryalbum", "gallery.change_galleryalbum", "gallery.delete_galleryalbum",
+    "gallery.add_galleryimage", "gallery.change_galleryimage", "gallery.delete_galleryimage",
+    "pages.change_contactmessage", "pages.delete_contactmessage",
+    "pages.change_supportpagecontent",
+    "pages.add_bankaccount", "pages.change_bankaccount", "pages.delete_bankaccount",
     ],
+
     "Church Admin": [
         "church_settings.change_churchsettings",
         "church_settings.add_servicetime", "church_settings.change_servicetime", "church_settings.delete_servicetime",
@@ -42,8 +48,12 @@ GROUP_PERMISSIONS = {
         "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
         "events.add_event", "events.change_event", "events.delete_event", "news.add_newscategory", "news.change_newscategory", "news.delete_newscategory",
-"news.add_article", "news.change_article", "news.delete_article",
+        "news.add_article", "news.change_article", "news.delete_article",
+        "gallery.add_galleryalbum", "gallery.change_galleryalbum", "gallery.delete_galleryalbum",
+        "gallery.add_galleryimage", "gallery.change_galleryimage", "gallery.delete_galleryimage",
+        "pages.change_contactmessage", "pages.delete_contactmessage",
     ],
+
     "Minister": [
         # Ministers CAN add/change/delete sermons at the permission
         # level — the restriction to "their own only" is enforced by

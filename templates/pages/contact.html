@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Contact Us — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}Get in touch with {{ church_settings.church_name }} — address, phone, email, and service times.{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Contact Us</h1>
+    <p class="font-body text-white/70 mt-3">We'd love to hear from you.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+    <div>
+      <h2 class="font-heading text-2xl text-navy mb-6">Send Us a Message</h2>
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <!-- Honeypot — visually hidden, not type="hidden" (see Step 1 note) -->
+        <div style="position:absolute; left:-9999px;" aria-hidden="true">
+          {{ form.website }}
+        </div>
+
+        {% if form.non_field_errors %}
+          <p class="font-body text-sm text-red-600 mb-4">{{ form.non_field_errors.0 }}</p>
+        {% endif %}
+
+        <div class="space-y-4">
+          <div>
+            <label for="{{ form.name.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}<p class="font-body text-xs text-red-600 mt-1">{{ form.name.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="{{ form.email.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}<p class="font-body text-xs text-red-600 mt-1">{{ form.email.errors.0 }}</p>{% endif %}
+          </div>
+          <div>
+            <label for="{{ form.phone.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">Phone (optional)</label>
+            {{ form.phone }}
+          </div>
+          <div>
+            <label for="{{ form.subject.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">Subject</label>
+            {{ form.subject }}
+          </div>
+          <div>
+            <label for="{{ form.message.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">Message</label>
+            {{ form.message }}
+            {% if form.message.errors %}<p class="font-body text-xs text-red-600 mt-1">{{ form.message.errors.0 }}</p>{% endif %}
+          </div>
+        </div>
+
+        <button type="submit"
+                class="mt-6 w-full sm:w-auto bg-gold text-navy-dark font-body font-semibold px-8 py-3 rounded-full hover:bg-gold-dark transition-colors">
+          Send Message
+        </button>
+      </form>
+    </div>
+
+    <div>
+      <h2 class="font-heading text-2xl text-navy mb-6">Visit or Reach Us</h2>
+      <div class="bg-cream rounded-lg p-6 space-y-3 mb-6">
+        {% if church_settings.address %}
+          <p class="font-body text-sm text-navy/80"><strong>Address:</strong> {{ church_settings.address }}</p>
+        {% endif %}
+        {% if church_settings.phone_primary %}
+          <p class="font-body text-sm text-navy/80"><strong>Phone:</strong> {{ church_settings.phone_primary }}</p>
+        {% endif %}
+        {% if church_settings.email %}
+          <p class="font-body text-sm text-navy/80"><strong>Email:</strong> {{ church_settings.email }}</p>
+        {% endif %}
+      </div>
+
+      {% if active_service_times %}
+        <div class="bg-cream rounded-lg p-6 mb-6">
+          <p class="font-body text-sm font-semibold text-navy mb-3">Service Times</p>
+          {% for service in active_service_times %}
+            <p class="font-body text-sm text-navy/70">{{ service.name }} — {{ service.get_day_display }} {{ service.start_time|time:"g:i A" }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if church_settings.map_embed_url %}
+        <div class="rounded-lg overflow-hidden aspect-video">
+          <iframe src="{{ church_settings.map_embed_url }}" class="w-full h-full" style="border:0;"
+                  allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}
