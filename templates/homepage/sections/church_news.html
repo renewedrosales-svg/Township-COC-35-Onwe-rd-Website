@@ -1,0 +1,38 @@
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">Stay Informed</p>
+        <h2 class="font-heading text-3xl sm:text-4xl text-navy">Church News</h2>
+      </div>
+      <a href="{% url 'news:list' %}" class="font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors whitespace-nowrap hidden sm:block">
+        View All →
+      </a>
+    </div>
+
+    {% if latest_articles %}
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+        {% for article in latest_articles %}
+          <a href="{% url 'news:detail' article.slug %}" class="block group">
+            {% if article.featured_image %}
+              <img src="{{ article.featured_image.url }}" alt="{{ article.title }}"
+                   class="w-full h-44 object-cover rounded-lg mb-4 group-hover:opacity-90 transition-opacity">
+            {% else %}
+              <div class="w-full h-44 bg-cream rounded-lg flex items-center justify-center mb-4">
+                <span class="font-body text-sm text-navy/40">No image</span>
+              </div>
+            {% endif %}
+            {% if article.category %}<p class="font-body text-xs text-gold-dark mb-1">{{ article.category.name }}</p>{% endif %}
+            <h3 class="font-heading text-lg text-navy group-hover:text-gold-dark transition-colors mb-1">{{ article.title }}</h3>
+            <p class="font-body text-sm text-navy/50">{{ article.publish_date|date:"M j, Y" }}</p>
+          </a>
+        {% endfor %}
+      </div>
+      <a href="{% url 'news:list' %}" class="block sm:hidden text-center font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors mt-8">
+        View All News →
+      </a>
+    {% else %}
+      <p class="font-body text-navy/50">No news yet — check back soon.</p>
+    {% endif %}
+  </div>
+</section>

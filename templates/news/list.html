@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}News — {{ church_settings.church_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl">Church News</h1>
+    <p class="font-body text-white/70 mt-3">Stories, updates, and announcements from our church family.</p>
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+    {% if featured_article %}
+      <a href="{% url 'news:detail' featured_article.slug %}"
+         class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-cream rounded-lg overflow-hidden mb-16 group">
+        {% if featured_article.featured_image %}
+          <img src="{{ featured_article.featured_image.url }}" alt="{{ featured_article.title }}" class="w-full h-64 lg:h-96 object-cover">
+        {% else %}
+          <div class="w-full h-64 lg:h-96 bg-navy/5 flex items-center justify-center">
+            <span class="font-body text-sm text-navy/40">No image</span>
+          </div>
+        {% endif %}
+        <div class="p-6 lg:pr-10">
+          <p class="font-body text-xs uppercase tracking-wide text-gold mb-3">
+            Featured {% if featured_article.category %}· {{ featured_article.category.name }}{% endif %}
+          </p>
+          <h2 class="font-heading text-2xl lg:text-3xl text-navy mb-3 group-hover:text-gold-dark transition-colors">{{ featured_article.title }}</h2>
+          <p class="font-body text-navy/60 mb-4">{{ featured_article.display_excerpt }}</p>
+          <p class="font-body text-xs text-navy/40">{{ featured_article.publish_date|date:"F j, Y" }}{% if featured_article.author %} · {{ featured_article.author.full_name }}{% endif %}</p>
+        </div>
+      </a>
+    {% endif %}
+
+    <form method="get" class="flex flex-wrap gap-3 mb-10">
+      <a href="{% url 'news:list' %}"
+         class="font-body text-sm px-4 py-2 rounded-full {% if not current_category %}bg-navy text-white{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %} transition-colors">
+        All
+      </a>
+      {% for cat in categories %}
+        <a href="?category={{ cat.slug }}"
+           class="font-body text-sm px-4 py-2 rounded-full {% if cat.slug == current_category %}bg-navy text-white{% else %}bg-navy/5 text-navy/60 hover:bg-navy/10{% endif %} transition-colors">
+          {{ cat.name }}
+        </a>
+      {% endfor %}
+    </form>
+
+    {% if articles %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for article in articles %}
+          <a href="{% url 'news:detail' article.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            {% if article.featured_image %}
+              <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-44 object-cover">
+            {% else %}
+              <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-sm text-navy/40">No image</span>
+              </div>
+            {% endif %}
+            <div class="p-5">
+              {% if article.category %}<p class="font-body text-xs text-gold-dark mb-1">{{ article.category.name }}</p>{% endif %}
+              <h3 class="font-heading text-lg text-navy mb-1">{{ article.title }}</h3>
+              <p class="font-body text-sm text-navy/60 mb-2">{{ article.display_excerpt }}</p>
+              <p class="font-body text-xs text-navy/40">{{ article.publish_date|date:"M j, Y" }}</p>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="flex justify-center gap-4 mt-12 font-body text-sm">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="text-navy hover:text-gold-dark">&larr; Previous</a>
+          {% endif %}
+          <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_category %}&category={{ current_category }}{% endif %}" class="text-navy hover:text-gold-dark">Next &rarr;</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% else %}
+      <p class="font-body text-navy/50 text-center py-12">No articles {% if current_category %}in this category {% endif %}yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

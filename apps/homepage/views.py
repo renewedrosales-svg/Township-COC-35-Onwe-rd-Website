@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 from apps.events.models import Event
 from apps.ministries.models import Ministry
+from apps.news.models import Article
 from apps.sermons.models import Sermon
 
 from .models import CreedItem, HomepageContent
@@ -34,5 +35,12 @@ class HomeView(TemplateView):
         if content.show_ministries_section:
             featured = Ministry.objects.filter(is_active=True, is_featured=True)
             context["preview_ministries"] = featured if featured.exists() else Ministry.objects.filter(is_active=True)[:6]
+
+        if content.show_news_section:
+            context["latest_articles"] = (
+                Article.objects.public()
+                .select_related("category")
+                .order_by("-publish_date")[:3]
+            )
 
         return context

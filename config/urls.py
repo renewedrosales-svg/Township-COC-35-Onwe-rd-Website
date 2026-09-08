@@ -19,10 +19,11 @@ urlpatterns = [
     path("ministries/", include("apps.ministries.urls")),
     path("teachings/", include("apps.sermons.urls")),
     path("events/", include("apps.events.urls")),
+    path("news/", include("apps.news.urls")),
 
     # pages.urls MUST stay LAST — catch-all "<slug:slug>/" pattern.
-    # news/, gallery/, contact/, school/ all get added ABOVE this line
-    # in their own phases.
+    # gallery/, contact/, school/ get added ABOVE this line in their
+    # own phases.
     path("", include("apps.pages.urls")),
 ]
 

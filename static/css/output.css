@@ -434,6 +434,9 @@
   .flex-1 {
     flex: 1;
   }
+  .flex-shrink {
+    flex-shrink: 1;
+  }
   .flex-shrink-0 {
     flex-shrink: 0;
   }
@@ -457,6 +460,9 @@
   }
   .flex-col {
     flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
   }
   .items-center {
     align-items: center;
@@ -556,6 +562,9 @@
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
+  }
+  .border-gold {
+    border-color: var(--color-gold);
   }
   .border-gold\/40 {
     border-color: color-mix(in srgb, #c9a24b 40%, transparent);
@@ -998,6 +1007,9 @@
     .group-hover\:text-navy-dark:is(:where(.group):hover *) {
       color: var(--color-navy-dark);
     }
+    .group-hover\:opacity-90:is(:where(.group):hover *) {
+      opacity: 90%;
+    }
     .group-hover\:opacity-100:is(:where(.group):hover *) {
       opacity: 100%;
     }
@@ -1006,6 +1018,14 @@
     }
     .hover\:bg-navy-light:hover {
       background-color: var(--color-navy-light);
+    }
+    .hover\:bg-navy\/10:hover {
+      background-color: color-mix(in srgb, #0f1f3d 10%, transparent);
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-navy\/10:hover {
+        background-color: color-mix(in oklab, var(--color-navy) 10%, transparent);
+      }
     }
     .hover\:bg-white\/10:hover {
       background-color: color-mix(in srgb, #fff 10%, transparent);
@@ -1117,6 +1137,9 @@
     .lg\:inline-flex {
       display: inline-flex;
     }
+    .lg\:h-96 {
+      height: calc(var(--spacing) * 96);
+    }
     .lg\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -1146,6 +1169,13 @@
     }
     .lg\:px-8 {
       padding-inline: calc(var(--spacing) * 8);
+    }
+    .lg\:pr-10 {
+      padding-right: calc(var(--spacing) * 10);
+    }
+    .lg\:text-3xl {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
     .lg\:text-6xl {
       font-size: var(--text-6xl);

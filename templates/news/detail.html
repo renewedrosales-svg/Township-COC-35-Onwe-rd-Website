@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ article.seo_title|default:article.title }} — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ article.seo_description|default:article.display_excerpt }}{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <a href="{% url 'news:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All News</a>
+
+    {% if article.category %}
+      <p class="font-body text-xs uppercase tracking-wide text-gold mt-4 mb-2">{{ article.category.name }}</p>
+    {% endif %}
+    <h1 class="font-heading text-4xl text-navy mb-3">{{ article.title }}</h1>
+    <p class="font-body text-sm text-navy/50 mb-8">
+      {{ article.publish_date|date:"F j, Y" }}{% if article.author %} · {{ article.author.full_name }}{% endif %}
+    </p>
+
+    {% if article.featured_image %}
+      <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full h-80 object-cover rounded-lg mb-8">
+    {% endif %}
+
+    <div class="font-body text-navy/70 leading-relaxed">
+      {{ article.body|linebreaks }}
+    </div>
+  </div>
+</section>
+
+{% if related_articles %}
+<section class="bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="font-heading text-2xl text-navy mb-8">More News</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {% for a in related_articles %}
+        <a href="{% url 'news:detail' a.slug %}" class="block bg-white rounded-lg p-5 hover:shadow-md transition-shadow">
+          <p class="font-body text-xs text-navy/50 mb-1">{{ a.publish_date|date:"M j, Y" }}</p>
+          <h3 class="font-heading text-base text-navy">{{ a.title }}</h3>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
