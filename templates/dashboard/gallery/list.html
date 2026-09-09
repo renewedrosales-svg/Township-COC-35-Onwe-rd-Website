@@ -1,0 +1,49 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Gallery{% endblock %}
+
+{% block dashboard_content %}
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-heading text-2xl text-navy">Gallery Albums</h1>
+  <a href="{% url 'dashboard:album_create' %}" class="bg-gold text-navy-dark font-body text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+    + New Album
+  </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+  {% if albums %}
+    <table class="w-full font-body text-sm">
+      <thead class="bg-cream text-navy/60 text-left">
+        <tr>
+          <th class="px-5 py-3">Title</th>
+          <th class="px-5 py-3">Event</th>
+          <th class="px-5 py-3">Photos</th>
+          <th class="px-5 py-3">Status</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for album in albums %}
+          <tr class="border-t border-navy/5">
+            <td class="px-5 py-3 text-navy">{{ album.title }}</td>
+            <td class="px-5 py-3 text-navy/60">{{ album.event|default:"—" }}</td>
+            <td class="px-5 py-3 text-navy/60">{{ album.images.count }}</td>
+            <td class="px-5 py-3">
+              {% if album.is_published %}
+                <span class="text-green-700 bg-green-50 px-2 py-0.5 rounded-full text-xs">Published</span>
+              {% else %}
+                <span class="text-navy/50 bg-navy/5 px-2 py-0.5 rounded-full text-xs">Draft</span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-3 text-right space-x-3">
+              <a href="{% url 'dashboard:album_update' album.slug %}" class="text-gold-dark hover:underline">Edit</a>
+              <a href="{% url 'dashboard:album_delete' album.slug %}" class="text-red-600 hover:underline">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="font-body text-sm text-navy/50 p-6">No albums yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

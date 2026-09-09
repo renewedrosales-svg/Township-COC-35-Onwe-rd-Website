@@ -1,0 +1,13 @@
+<section class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+    <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">Education</p>
+    <h2 class="font-heading text-3xl sm:text-4xl mb-4">{{ school_info.school_name }}</h2>
+    {% if school_info.intro_text %}
+      <p class="font-body text-white/70 max-w-xl mx-auto mb-8">{{ school_info.intro_text }}</p>
+    {% endif %}
+    <a href="{% url 'school:index' %}"
+       class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3 rounded-full hover:bg-gold-dark transition-colors">
+      Learn More →
+    </a>
+  </div>
+</section>

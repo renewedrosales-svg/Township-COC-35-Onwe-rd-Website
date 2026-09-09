@@ -11,3 +11,20 @@ def church_context(request):
         "church_settings": ChurchSettings.load(),
         "active_service_times": ServiceTime.objects.filter(is_active=True),
     }
+
+
+def church_context(request):
+    return {
+        "church_settings": ChurchSettings.load(),
+        "active_service_times": ServiceTime.objects.filter(is_active=True),
+        "nav_links": [
+            ("pages:about", "About Us"),
+            ("ministries:list", "Ministries"),
+            ("sermons:list", "Teachings"),
+            ("events:list", "Events"),
+            ("news:list", "News"),
+            ("gallery:list", "Gallery"),
+            ("pages:contact", "Contact"),
+            ("school:index", "School"),
+        ],
+    }

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ school_info.school_name }} — {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ school_info.about_preview|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<section class="relative bg-navy text-white">
+  {% if school_info.hero_image %}
+    <img src="{{ school_info.hero_image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+  {% endif %}
+  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+    <h1 class="font-heading text-4xl sm:text-5xl mb-4">{{ school_info.school_name }}</h1>
+    {% if school_info.intro_text %}
+      <p class="font-body text-white/80 text-lg">{{ school_info.intro_text }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-10">
+    {% if school_info.about_preview %}
+      <div>
+        <h2 class="font-heading text-2xl text-navy mb-3">About Our School</h2>
+        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ school_info.about_preview }}</p>
+      </div>
+    {% endif %}
+
+    {% if school_info.programs_preview %}
+      <div>
+        <h2 class="font-heading text-2xl text-navy mb-3">Programs</h2>
+        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ school_info.programs_preview }}</p>
+      </div>
+    {% endif %}
+
+    {% if school_info.contact_email or school_info.contact_phone %}
+      <div class="bg-cream rounded-lg p-6">
+        <p class="font-body text-sm font-semibold text-navy mb-2">School Office Contact</p>
+        {% if school_info.contact_email %}<p class="font-body text-sm text-navy/70">{{ school_info.contact_email }}</p>{% endif %}
+        {% if school_info.contact_phone %}<p class="font-body text-sm text-navy/70">{{ school_info.contact_phone }}</p>{% endif %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="bg-navy-dark text-white">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <h2 class="font-heading text-2xl mb-3">School Portal</h2>
+    <p class="font-body text-white/60 mb-6">Student and staff portal access is coming soon.</p>
+    <button type="button" disabled
+            class="inline-flex items-center gap-2 bg-white/10 text-white/50 font-body font-semibold px-7 py-3 rounded-full cursor-not-allowed">
+      Coming Soon
+    </button>
+  </div>
+</section>
+{% endblock %}

@@ -1,44 +1,50 @@
 {% load static %}
-<header class="bg-navy text-white sticky top-0 z-50 shadow-sm" x-data="{ mobileOpen: false }">
+<header class="bg-navy/95 backdrop-blur text-white sticky top-0 z-50 border-b border-gold/20 shadow-[0_1px_0_0_rgba(201,162,75,0.15)]"
+        x-data="{ mobileOpen: false }">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
 
-      <a href="{% url 'home' %}" class="flex items-center gap-3">
+      <a href="{% url 'home' %}" class="flex items-center gap-3 group">
         {% if church_settings.logo %}
           <img src="{{ church_settings.logo.url }}"
               alt="{{ church_settings.church_name }}"
-              class="h-12 w-auto">
+              class="h-12 w-auto transition-transform duration-300 group-hover:scale-105">
         {% else %}
-          <span class="font-heading text-xl text-gold tracking-wide">
+          <span class="font-heading text-xl text-gold tracking-wide transition-colors duration-300 group-hover:text-gold-dark">
             {{ church_settings.church_name }}
           </span>
         {% endif %}
       </a>
 
-      <nav class="hidden lg:flex items-center gap-8 font-body text-sm">
-        <a href="{% url 'pages:about' %}" class="hover:text-gold transition-colors">About Us</a>
-        <a href="{% url 'ministries:list' %}" class="hover:text-gold transition-colors">Ministries</a>
-        <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
-        <a href="{% url 'events:list' %}" class="hover:text-gold transition-colors">Events</a>
-        <a href="{% url 'news:list' %}" class="hover:text-gold transition-colors">News</a>
-        <a href="{% url 'gallery:list' %}" class="hover:text-gold transition-colors">Gallery</a>
-        <a href="{% url 'pages:contact' %}" class="hover:text-gold transition-colors">Contact</a>
+      <nav class="hidden lg:flex items-center gap-1 font-body text-sm">
+        {% for url_name, label in nav_links %}
+          <a href="{% url url_name %}"
+             {% if request.resolver_match.view_name == url_name %}aria-current="page"{% endif %}
+             class="relative px-3 py-2 text-white/85 transition-colors duration-200 hover:text-gold
+                    after:content-[''] after:absolute after:left-3 after:right-3 after:-bottom-0.5 after:h-0.5
+                    after:bg-gold after:origin-left after:transition-transform after:duration-300
+                    {% if request.resolver_match.view_name == url_name %}text-gold after:scale-x-100{% else %}after:scale-x-0 hover:after:scale-x-100{% endif %}">
+            {{ label }}
+          </a>
+        {% endfor %}
       </nav>
 
       <a href="{% url 'pages:support' %}"
-        class="hidden lg:inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold text-sm px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+         class="hidden lg:inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold text-sm px-5 py-2.5 rounded-full
+                shadow-sm transition-all duration-300 hover:bg-gold-dark hover:shadow-lg hover:shadow-gold/20 hover:-translate-y-0.5
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-navy">
         Support
       </a>
 
       <button
-        class="lg:hidden text-white"
+        class="lg:hidden relative w-9 h-9 flex items-center justify-center text-white rounded-lg transition-colors hover:bg-white/10"
         @click="mobileOpen = !mobileOpen"
         :aria-expanded="mobileOpen"
         aria-label="Toggle navigation menu">
-        <svg x-show="!mobileOpen" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg x-show="!mobileOpen" x-transition.opacity.duration.200ms class="w-6 h-6 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <svg x-show="mobileOpen" class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;">
+        <svg x-show="mobileOpen" x-transition.opacity.duration.200ms class="w-6 h-6 absolute" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
@@ -48,18 +54,27 @@
 
   <nav
     x-show="mobileOpen"
-    x-transition
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 -translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 -translate-y-2"
     @click.outside="mobileOpen = false"
-    class="lg:hidden bg-navy-dark px-4 pb-6 pt-2 flex flex-col gap-4 font-body text-sm"
+    class="lg:hidden bg-navy-dark border-t border-gold/10 rounded-b-2xl px-4 pb-6 pt-3 flex flex-col gap-1 font-body text-sm"
     style="display:none;">
-    <a href="{% url 'pages:about' %}" class="hover:text-gold transition-colors">About Us</a>
-    <a href="{% url 'ministries:list' %}" class="hover:text-gold transition-colors">Ministries</a>
-    <a href="{% url 'sermons:list' %}" class="hover:text-gold transition-colors">Teachings</a>
-    <a href="{% url 'events:list' %}" class="hover:text-gold transition-colors">Events</a>
-    <a href="{% url 'news:list' %}" class="hover:text-gold transition-colors">News</a>
-    <a href="{% url 'gallery:list' %}" class="hover:text-gold transition-colors">Gallery</a>
-    <a href="{% url 'pages:contact' %}" class="hover:text-gold transition-colors">Contact</a>
-    <a href="{% url 'pages:support' %}" class="mt-2 inline-flex justify-center bg-gold text-navy-dark font-semibold px-5 py-2.5 rounded-full">
+    {% for url_name, label in nav_links %}
+      <a href="{% url url_name %}"
+         {% if request.resolver_match.view_name == url_name %}aria-current="page"{% endif %}
+         class="px-3 py-2.5 rounded-lg transition-colors duration-200
+                {% if request.resolver_match.view_name == url_name %}text-gold bg-white/5{% else %}text-white/85 hover:text-gold hover:bg-white/5{% endif %}">
+        {{ label }}
+      </a>
+    {% endfor %}
+
+    <a href="{% url 'pages:support' %}"
+       class="mt-3 inline-flex justify-center items-center gap-2 bg-gold text-navy-dark font-semibold px-5 py-2.5 rounded-full
+              transition-all duration-300 hover:bg-gold-dark active:scale-95">
       Support
     </a>
   </nav>

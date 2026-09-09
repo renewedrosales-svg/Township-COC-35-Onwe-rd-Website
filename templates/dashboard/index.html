@@ -1,7 +1,37 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="max-w-3xl mx-auto px-4 py-24 text-center">
-  <h1 class="font-heading text-3xl text-navy">Dashboard placeholder</h1>
-  <p class="font-body text-navy/70 mt-2">Logged in as {{ request.user }}. Real dashboard UI built in Phase 12.</p>
+{% extends "dashboard/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<h1 class="font-heading text-2xl text-navy mb-1">Welcome back, {{ request.user.get_full_name|default:request.user.username }}</h1>
+<p class="font-body text-sm text-navy/50 mb-8">Here's what's happening.</p>
+
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+  {% for key, value in stats.items %}
+    <div class="bg-white rounded-lg p-5 shadow-sm">
+      <p class="font-heading text-3xl text-navy">{{ value }}</p>
+      <p class="font-body text-xs text-navy/50 mt-1">{{ key|title|cut:"_"|default:key }}</p>
+    </div>
+  {% endfor %}
 </div>
+
+{% if is_church_admin %}
+  <div class="bg-white rounded-lg p-6 shadow-sm">
+    <h2 class="font-heading text-lg text-navy mb-4">Recent Activity</h2>
+    {% if recent_activity %}
+      <div class="space-y-3">
+        {% for entry in recent_activity %}
+          <div class="flex items-center justify-between font-body text-sm border-b border-navy/5 pb-3 last:border-0 last:pb-0">
+            <span class="text-navy/80">
+              <strong>{{ entry.user|default:"System" }}</strong> {{ entry.get_action_display|lower }} {{ entry.model_name }}
+              <span class="text-navy/50">"{{ entry.object_repr }}"</span>
+            </span>
+            <span class="text-navy/40 text-xs whitespace-nowrap">{{ entry.timestamp|timesince }} ago</span>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="font-body text-sm text-navy/50">No activity yet.</p>
+    {% endif %}
+  </div>
+{% endif %}
 {% endblock %}

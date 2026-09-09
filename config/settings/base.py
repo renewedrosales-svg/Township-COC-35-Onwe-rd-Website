@@ -55,6 +55,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'apps.church_settings.context_processors.church_context',
+                'apps.dashboard.context_processors.dashboard_context',
             ],
         },
     },

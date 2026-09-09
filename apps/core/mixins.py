@@ -75,3 +75,33 @@ class OwnerOrElevatedRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         if not self.request.user.is_authenticated:
             return super().handle_no_permission()
         raise PermissionDenied("You can only manage content you created.")
+
+
+class MinisterOwnershipRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """
+    Combines a role gate (must be Minister/Church Admin/Super Admin)
+    with object-level ownership (a Minister may only act on objects
+    they created; Church Admin/Super Admin bypass ownership entirely).
+
+    This exists as ONE mixin, not two stacked ones, because two
+    UserPassesTestMixin-based mixins both defining test_func() would
+    mean Python's MRO only ever calls the first — the second's check
+    would silently never run. Combining both conditions here is the
+    correct way to enforce "right role AND (owns it OR is elevated)."
+    """
+    allowed_groups = ("Minister", "Church Admin", "Super Admin")
+    elevated_groups = ("Church Admin", "Super Admin")
+
+    def test_func(self):
+        user = self.request.user
+        if not user.groups.filter(name__in=self.allowed_groups).exists():
+            return False
+        if user.groups.filter(name__in=self.elevated_groups).exists():
+            return True
+        obj = self.get_object()
+        return getattr(obj, "created_by_id", None) == user.id
+
+    def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+        raise PermissionDenied("You can only manage content you created.")

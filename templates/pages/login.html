@@ -1,26 +1,68 @@
 {% extends "base.html" %}
-{% block title %}Sign In — 35 Onwe Road Church of Christ{% endblock %}
+{% block title %}Sign In — {{ church_settings.church_name }}{% endblock %}
+
 {% block content %}
-<div class="max-w-md mx-auto px-4 py-24">
-  <h1 class="font-heading text-3xl text-navy mb-6">Sign In</h1>
+<section class="min-h-[calc(100vh-5rem)] grid grid-cols-1 lg:grid-cols-2">
 
-  {% if form.errors %}
-    <p class="text-red-600 font-body text-sm mb-4">Invalid username or password. Please try again.</p>
-  {% endif %}
+  <!-- Brand panel -->
+  <div class="hidden lg:flex flex-col justify-between bg-navy text-white p-12 relative overflow-hidden">
+    <div class="absolute inset-0 bg-linear-to-br from-navy via-navy to-navy-dark"></div>
+    <div class="relative">
+        <span class="font-heading text-xl text-gold font-extrabold">{{ church_settings.church_name }}</span>
+    </div>
+    <div class="relative">
+      <p class="font-heading text-3xl leading-snug mb-4">
+        "Greet one another with a holy kiss." <span class="text-gold">Rom 16:16</span>
+      </p>
+      <p class="font-body text-white/60 text-sm">Staff & Ministry Dashboard</p>
+    </div>
+    <div class="relative"></div>
+  </div>
 
-  <form method="post" class="space-y-4">
-    {% csrf_token %}
-    <div>
-      <label class="block font-body text-sm text-navy/70 mb-1">Username</label>
-      {{ form.username }}
+  <!-- Form panel -->
+  <div class="flex items-center justify-center px-6 py-16 bg-white">
+    <div class="w-full max-w-sm">
+
+      <div class="lg:hidden text-center mb-8">
+        {% if church_settings.logo %}
+          <img src="{{ church_settings.logo.url }}" alt="{{ church_settings.church_name }}" class="h-12 w-auto mx-auto mb-3">
+        {% endif %}
+        <p class="font-body text-sm text-navy/50">{{ church_settings.church_name }}</p>
+      </div>
+
+      <h1 class="font-heading text-3xl text-navy mb-2">Sign In</h1>
+      <p class="font-body text-sm text-navy/50 mb-8">Access the church dashboard</p>
+
+      {% if form.errors %}
+        <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 font-body text-sm">
+          Incorrect username or password. Please try again.
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        <div>
+          <label for="{{ form.username.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1.5">Username</label>
+          {{ form.username }}
+        </div>
+
+        <div>
+          <label for="{{ form.password.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1.5">Password</label>
+          {{ form.password }}
+        </div>
+
+        <button type="submit"
+                class="w-full bg-gold text-navy-dark font-body font-semibold py-3 rounded-full hover:bg-gold-dark transition-colors">
+          Sign In
+        </button>
+      </form>
+
+      <a href="{% url 'home' %}" class="block text-center font-body text-sm text-navy/40 hover:text-navy mt-8">
+        &larr; Back to the website
+      </a>
     </div>
-    <div>
-      <label class="block font-body text-sm text-navy/70 mb-1">Password</label>
-      {{ form.password }}
-    </div>
-    <button type="submit" class="w-full bg-gold text-navy-dark font-semibold py-2.5 rounded-full hover:bg-gold-dark transition-colors">
-      Sign In
-    </button>
-  </form>
-</div>
+  </div>
+
+</section>
 {% endblock %}

@@ -2,6 +2,9 @@ from django import forms
 
 from .models import ContactMessage
 
+from apps.core.forms import TailwindStyledFormMixin
+
+from .models import Page
 
 class ContactForm(forms.ModelForm):
     # Honeypot field: real users never see or fill this (hidden via
@@ -38,3 +41,9 @@ class ContactForm(forms.ModelForm):
         if value:
             raise forms.ValidationError("Spam detected.")  # message never actually shown to a real user
         return value
+
+class PageForm(TailwindStyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = Page
+        fields = ["title", "slug", "body", "seo_title", "seo_description", "is_published"]
+        widgets = {"body": forms.Textarea(attrs={"rows": 10})}

@@ -34,6 +34,7 @@ GROUP_PERMISSIONS = {
     "pages.change_contactmessage", "pages.delete_contactmessage",
     "pages.change_supportpagecontent",
     "pages.add_bankaccount", "pages.change_bankaccount", "pages.delete_bankaccount",
+    "school.change_schoolinfo",
     ],
 
     "Church Admin": [

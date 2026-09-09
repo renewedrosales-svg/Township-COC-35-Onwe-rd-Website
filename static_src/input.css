@@ -5,7 +5,7 @@
 
 @font-face {
   font-family: "Playfair Display";
-  src: url("../static/fonts/PlayfairDisplay-Variable.ttf") format("truetype-variations");
+  src: url("../fonts/PlayfairDisplay-Variable.ttf") format("truetype-variations");
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: "Inter";
-  src: url("../static/fonts/Inter-Variable.ttf") format("truetype-variations");
+  src: url("../fonts/Inter-Variable.ttf") format("truetype-variations");
   font-weight: 300 900;
   font-style: normal;
   font-display: swap;
@@ -29,7 +29,28 @@
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, sans-serif;
-  
+}
+
+/* ============================================================
+   CENTRAL FONT-SIZE CONTROL
+
+   Change ONLY --app-base-font-size below to scale text size across
+   the ENTIRE system — every dashboard, form, and table — proportionally.
+   Every Tailwind text utility (text-sm, text-base, text-xl, etc.) is
+   defined in rem units, always relative to this root value, so this
+   one line is the single source of truth.
+
+   Do NOT set font-size in px directly in any template or component —
+   doing so opts that element out of this central control. Always use
+   Tailwind's text-* utility classes, which stay rem-based and will
+   automatically respect this setting.
+   ============================================================ */
+:root {
+  --app-base-font-size: 20px; /* 16px = Tailwind's default (1rem = 16px) */
+}
+
+html {
+  font-size: var(--app-base-font-size);
 }
 
 [x-cloak] {

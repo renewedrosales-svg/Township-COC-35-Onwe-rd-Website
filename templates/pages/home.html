@@ -39,11 +39,9 @@
     {% include "homepage/sections/gallery_preview.html" %}
   {% endif %}
 
-  {% comment %}
-    Sections below are wired but intentionally not yet enabled —
-    each becomes active as its owning app is completed:
-      School        → Phase 13  (show_school_section)
-  {% endcomment %}
+  {% if homepage_content.show_school_section %}
+    {% include "homepage/sections/school_preview.html" %}
+  {% endif %}
 
   {% if homepage_content.show_visit_cta_section %}
     {% include "homepage/sections/visit_cta.html" %}

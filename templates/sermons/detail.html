@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load sermon_extras %}
-{% block title %}{{ sermon.title }} — {{ church_settings.church_name }}{% endblock %}
+{% block title %}{{ sermon.title }} - {{ church_settings.church_name }}{% endblock %}
 {% block meta_description %}{{ sermon.description|truncatewords:25 }}{% endblock %}
 
 {% block content %}

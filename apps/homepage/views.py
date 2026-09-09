@@ -9,6 +9,7 @@ from apps.sermons.models import Sermon
 
 from .models import CreedItem, HomepageContent
 
+from apps.school.models import SchoolInfo
 
 class HomeView(TemplateView):
     template_name = "pages/home.html"
@@ -50,5 +51,8 @@ class HomeView(TemplateView):
                 .select_related("album")
                 .order_by("-album__created_at", "order")[:8]
             )
+
+        if content.show_school_section:
+            context["school_info"] = SchoolInfo.load()
 
         return context

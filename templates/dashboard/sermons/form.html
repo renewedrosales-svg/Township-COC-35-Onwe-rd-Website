@@ -1,0 +1,25 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}New{% endif %} Teaching{% endblock %}
+
+{% block dashboard_content %}
+<h1 class="font-heading text-2xl text-navy mb-6">{% if form.instance.pk %}Edit{% else %}New{% endif %} Teaching</h1>
+
+<form method="post" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm p-6 max-w-2xl space-y-5">
+  {% csrf_token %}
+  {% for field in form %}
+    <div>
+      <label for="{{ field.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<p class="font-body text-xs text-navy/40 mt-1">{{ field.help_text }}</p>{% endif %}
+      {% if field.errors %}<p class="font-body text-xs text-red-600 mt-1">{{ field.errors.0 }}</p>{% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="flex gap-3 pt-2">
+    <button type="submit" class="bg-gold text-navy-dark font-body font-semibold px-6 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+      Save
+    </button>
+    <a href="{% url 'dashboard:sermon_list' %}" class="font-body text-sm text-navy/60 px-6 py-2.5 hover:text-navy">Cancel</a>
+  </div>
+</form>
+{% endblock %}

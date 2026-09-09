@@ -1,0 +1,54 @@
+{% extends "dashboard/base.html" %}
+{% block title %}Teachings{% endblock %}
+
+{% block dashboard_content %}
+<div class="flex items-center justify-between mb-6">
+  <h1 class="font-heading text-2xl text-navy">Teachings</h1>
+  <a href="{% url 'dashboard:sermon_create' %}" class="bg-gold text-navy-dark font-body text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+    + New Teaching
+  </a>
+</div>
+
+<div class="bg-white rounded-lg shadow-sm overflow-hidden">
+  {% if sermons %}
+    <table class="w-full font-body text-sm">
+      <thead class="bg-cream text-navy/60 text-left">
+        <tr>
+          <th class="px-5 py-3">Title</th>
+          <th class="px-5 py-3">Date</th>
+          <th class="px-5 py-3">Status</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sermon in sermons %}
+          <tr class="border-t border-navy/5">
+            <td class="px-5 py-3 text-navy">{{ sermon.title }}</td>
+            <td class="px-5 py-3 text-navy/60">{{ sermon.date_delivered|date:"M j, Y" }}</td>
+            <td class="px-5 py-3">
+              {% if sermon.is_published %}
+                <span class="text-green-700 bg-green-50 px-2 py-0.5 rounded-full text-xs">Published</span>
+              {% else %}
+                <span class="text-navy/50 bg-navy/5 px-2 py-0.5 rounded-full text-xs">Draft</span>
+              {% endif %}
+            </td>
+            <td class="px-5 py-3 text-right space-x-3">
+              <a href="{% url 'dashboard:sermon_update' sermon.slug %}" class="text-gold-dark hover:underline">Edit</a>
+              <a href="{% url 'dashboard:sermon_delete' sermon.slug %}" class="text-red-600 hover:underline">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if is_paginated %}
+      <div class="flex justify-center gap-4 py-4 font-body text-sm">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}" class="text-navy hover:text-gold-dark">&larr; Previous</a>{% endif %}
+        <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}" class="text-navy hover:text-gold-dark">Next &rarr;</a>{% endif %}
+      </div>
+    {% endif %}
+  {% else %}
+    <p class="font-body text-sm text-navy/50 p-6">No teachings yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

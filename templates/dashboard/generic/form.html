@@ -1,0 +1,40 @@
+{% extends "dashboard/base.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block dashboard_content %}
+<h1 class="font-heading text-2xl text-navy mb-6">{{ page_title }}</h1>
+
+{% if admin_hint %}
+  <div class="bg-gold/10 border border-gold/30 rounded-lg px-4 py-3 mb-6 font-body text-sm text-navy/80 max-w-2xl">
+    📷 To add or reorder photos in this album, use
+    {% if admin_edit_url %}
+      <a href="{{ admin_edit_url }}" class="text-gold-dark underline" target="_blank">Django Admin</a>
+    {% else %}
+      Django Admin (save this album first, then edit it there)
+    {% endif %}
+    — photo management stays there for now.
+  </div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="bg-white rounded-lg shadow-sm p-6 max-w-2xl space-y-5">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+    <p class="font-body text-sm text-red-600">{{ form.non_field_errors.0 }}</p>
+  {% endif %}
+  {% for field in form %}
+    <div>
+      <label for="{{ field.id_for_label }}" class="block font-body text-sm text-navy/70 mb-1">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<p class="font-body text-xs text-navy/40 mt-1">{{ field.help_text }}</p>{% endif %}
+      {% if field.errors %}<p class="font-body text-xs text-red-600 mt-1">{{ field.errors.0 }}</p>{% endif %}
+    </div>
+  {% endfor %}
+
+  <div class="flex gap-3 pt-2">
+    <button type="submit" class="bg-gold text-navy-dark font-body font-semibold px-6 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+      Save
+    </button>
+    <a href="{{ cancel_url }}" class="font-body text-sm text-navy/60 px-6 py-2.5 hover:text-navy">Cancel</a>
+  </div>
+</form>
+{% endblock %}
