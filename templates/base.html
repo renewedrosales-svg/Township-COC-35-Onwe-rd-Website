@@ -4,13 +4,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}35 Onwe Road Church of Christ, Abakaliki{% endblock %}</title>
-  <meta name="description" content="{% block meta_description %}A place to worship, grow, and serve — 35 Onwe Road Church of Christ, Abakaliki.{% endblock %}">
+  <title>{% block title %}{{ church_settings.church_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ church_settings.default_seo_description|default:'A place to worship, grow, and serve.' }}{% endblock %}">
+
+  <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+  {% if church_settings.favicon %}
+    <link rel="icon" href="{{ church_settings.favicon.url }}">
+  {% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ church_settings.church_name }}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ church_settings.church_name }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ church_settings.default_seo_description|default:'A place to worship, grow, and serve.' }}{% endblock %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  {% block og_image %}
+    {% if church_settings.default_og_image %}
+      <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ church_settings.default_og_image.url }}">
+    {% endif %}
+  {% endblock %}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}{{ church_settings.church_name }}{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{{ church_settings.default_seo_description|default:'A place to worship, grow, and serve.' }}{% endblock %}">
 
   <link rel="stylesheet" href="{% static 'css/output.css' %}">
   {% block extra_css %}{% endblock %}
+
+  <!-- Structured data: built and safely serialized in the church_context
+       context processor via json.dumps() — never hand-assembled here. -->
+  <script type="application/ld+json">{{ church_structured_data|safe }}</script>
 </head>
 <body class="font-body text-navy antialiased">
+
+  <a href="#main-content"
+     class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100
+            focus:bg-gold focus:text-navy-dark focus:px-4 focus:py-2 focus:rounded-lg focus:font-body focus:text-sm focus:font-semibold">
+    Skip to main content
+  </a>
 
   {% include "components/navbar.html" %}
 
@@ -27,7 +60,7 @@
     </div>
   {% endif %}
 
-  <main>
+  <main id="main-content">
     {% block content %}{% endblock %}
   </main>
 

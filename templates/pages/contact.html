@@ -85,7 +85,8 @@
 
       {% if church_settings.map_embed_url %}
         <div class="rounded-lg overflow-hidden aspect-video">
-          <iframe src="{{ church_settings.map_embed_url }}" class="w-full h-full" style="border:0;"
+          <iframe src="{{ church_settings.map_embed_url }}" title="Map to {{ church_settings.church_name }}"
+                  class="w-full h-full" style="border:0;"
                   allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       {% endif %}

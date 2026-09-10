@@ -17,7 +17,7 @@
     </div>
     <div class="order-1 lg:order-2">
       {% if homepage_content.about_image %}
-        <img src="{{ homepage_content.about_image.url }}" alt="{{ homepage_content.about_heading }}"
+        <img src="{{ homepage_content.about_image.url }}" alt="{{ homepage_content.about_heading }}" loading="lazy"
              class="w-full h-80 sm:h-96 object-cover rounded-lg">
       {% else %}
         <div class="w-full h-80 sm:h-96 bg-navy/5 rounded-lg flex items-center justify-center">

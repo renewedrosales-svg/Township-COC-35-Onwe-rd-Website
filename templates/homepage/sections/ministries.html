@@ -11,7 +11,7 @@
         <a href="{% url 'ministries:detail' ministry.slug %}" class="group flex flex-col items-center">
           <div class="w-16 h-16 rounded-full bg-navy text-white flex items-center justify-center mb-3 group-hover:bg-gold group-hover:text-navy-dark transition-colors">
             {% if ministry.image %}
-              <img src="{{ ministry.image.url }}" alt="" class="w-full h-full rounded-full object-cover">
+              <img src="{{ ministry.image.url }}" alt="" class="w-full h-full rounded-full object-cover" loading="lazy">
             {% else %}
               <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a4 4 0 0 0-10 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>

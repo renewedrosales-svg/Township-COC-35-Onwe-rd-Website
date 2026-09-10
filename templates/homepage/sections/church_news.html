@@ -15,7 +15,7 @@
         {% for article in latest_articles %}
           <a href="{% url 'news:detail' article.slug %}" class="block group">
             {% if article.featured_image %}
-              <img src="{{ article.featured_image.url }}" alt="{{ article.title }}"
+              <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" loading="lazy"
                    class="w-full h-44 object-cover rounded-lg mb-4 group-hover:opacity-90 transition-opacity">
             {% else %}
               <div class="w-full h-44 bg-cream rounded-lg flex items-center justify-center mb-4">

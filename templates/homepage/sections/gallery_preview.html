@@ -14,7 +14,7 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {% for img in preview_images %}
           <a href="{% url 'gallery:detail' img.album.slug %}" class="block aspect-square rounded-lg overflow-hidden group">
-            <img src="{{ img.image.url }}" alt="{{ img.display_alt }}"
+            <img src="{{ img.image.url }}" alt="{{ img.display_alt }}" loading="lazy"
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
           </a>
         {% endfor %}

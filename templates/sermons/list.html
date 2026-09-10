@@ -31,7 +31,7 @@
         {% for sermon in sermons %}
           <a href="{% url 'sermons:detail' sermon.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {% if sermon.thumbnail %}
-              <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" class="w-full h-44 object-cover">
+              <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" loading="lazy" class="w-full h-44 object-cover">
             {% else %}
               <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
                 <span class="font-body text-sm text-navy/40">No thumbnail</span>

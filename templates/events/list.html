@@ -18,7 +18,7 @@
         {% for event in upcoming_events %}
           <a href="{% url 'events:detail' event.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {% if event.image %}
-              <img src="{{ event.image.url }}" alt="{{ event.title }}" class="w-full h-44 object-cover">
+              <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy" class="w-full h-44 object-cover">
             {% else %}
               <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
                 <span class="font-body text-sm text-navy/40">No image</span>

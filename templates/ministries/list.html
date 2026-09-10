@@ -16,7 +16,7 @@
         {% for ministry in ministries %}
           <a href="{% url 'ministries:detail' ministry.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
             {% if ministry.image %}
-              <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" class="w-full h-48 object-cover">
+              <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" loading="lazy" class="w-full h-48 object-cover">
             {% else %}
               <div class="w-full h-48 bg-navy/5 flex items-center justify-center">
                 <span class="font-body text-sm text-navy/40">No image</span>

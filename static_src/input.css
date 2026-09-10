@@ -56,3 +56,33 @@ html {
 [x-cloak] {
   display: none !important;
 }
+
+/* Visible keyboard focus on every interactive element site-wide.
+   Applies automatically to every link/button/input in every template
+   — no per-element focus classes needed except where a component
+   wants a custom focus treatment (e.g. the Support button already
+   has its own focus-visible ring, which this rule doesn't override). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Respect the OS-level "reduce motion" accessibility setting.
+   Overrides every transition/animation duration to near-zero for
+   users who've asked for it — hover scales, the lightbox fade,
+   mobile menu slide, all become instant instead of animated. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

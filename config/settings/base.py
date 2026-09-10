@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'apps.gallery',
     'apps.school',
     'apps.dashboard',
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [

@@ -16,7 +16,7 @@
       <a href="{% url 'news:detail' featured_article.slug %}"
          class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-cream rounded-lg overflow-hidden mb-16 group">
         {% if featured_article.featured_image %}
-          <img src="{{ featured_article.featured_image.url }}" alt="{{ featured_article.title }}" class="w-full h-64 lg:h-96 object-cover">
+          <img src="{{ featured_article.featured_image.url }}" alt="{{ featured_article.title }}" loading="lazy" class="w-full h-64 lg:h-96 object-cover">
         {% else %}
           <div class="w-full h-64 lg:h-96 bg-navy/5 flex items-center justify-center">
             <span class="font-body text-sm text-navy/40">No image</span>

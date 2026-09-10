@@ -1,6 +1,15 @@
 {% extends "base.html" %}
-{% block title %}{{ event.title }} - {{ church_settings.church_name }}{% endblock %}
+{% block title %}{{ event.title }} — {{ church_settings.church_name }}{% endblock %}
 {% block meta_description %}{{ event.description|truncatewords:25 }}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ event.title }}{% endblock %}
+{% block og_description %}{{ event.description|truncatewords:30|default:event.title }}{% endblock %}
+{% block og_image %}
+  {% if event.image %}
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ event.image.url }}">
+  {% endif %}
+{% endblock %}
 
 {% block content %}
 <section class="bg-white">
