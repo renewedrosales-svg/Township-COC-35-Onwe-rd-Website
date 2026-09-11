@@ -48,15 +48,17 @@ class DashboardSermonUpdateView(MinisterOwnershipRequiredMixin, UpdateView):
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        # Belt-and-suspenders: the queryset itself is scoped for
-        # Ministers too, not just the mixin's test_func. Even if the
-        # mixin check were ever bypassed by a future code change,
-        # get_object() still physically cannot fetch another
-        # minister's sermon from the database.
-        qs = Sermon.objects.all()
-        if _is_elevated(self.request.user):
-            return qs
-        return qs.filter(created_by=self.request.user)
+        # Deliberately UNFILTERED — MinisterOwnershipRequiredMixin's
+        # test_func() is the single authorization boundary here. It
+        # needs to actually find the object to compare created_by
+        # against the requesting user; a pre-filtered queryset would
+        # make another minister's sermon invisible before the ownership
+        # check ever runs, producing a 404 instead of a proper 403.
+        # This was previously "belt-and-suspenders" double-filtering —
+        # removed deliberately (Phase 15) in favor of one clear,
+        # correctly-tested authorization point rather than two
+        # overlapping ones that silently changed the response code.
+        return Sermon.objects.all()
 
     def form_valid(self, form):
         was_published = Sermon.objects.filter(pk=self.object.pk, is_published=True).exists()
@@ -80,10 +82,8 @@ class DashboardSermonDeleteView(MinisterOwnershipRequiredMixin, DeleteView):
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        qs = Sermon.objects.all()
-        if _is_elevated(self.request.user):
-            return qs
-        return qs.filter(created_by=self.request.user)
+        # Same reasoning as DashboardSermonUpdateView above.
+        return Sermon.objects.all()
 
     def form_valid(self, form):
         log_action(self.request.user, "delete", self.object)

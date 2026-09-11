@@ -5,10 +5,14 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from apps.core.views import robots_txt
 
+from apps.accounts.views import RateLimitAwareLoginView
+
 from .views import health_check
 from apps.accounts.forms import StyledLoginForm
 
 from django.contrib.sitemaps.views import sitemap
+
+from apps.core.views import custom_400, custom_403, custom_404, custom_500
 
 from apps.core.sitemaps import (
     ArticleSitemap,
@@ -35,7 +39,7 @@ urlpatterns = [
     path("health/", health_check, name="health_check"),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 
-    path("login/", auth_views.LoginView.as_view(template_name="pages/login.html", authentication_form=StyledLoginForm), name="login"),
+    path("login/", RateLimitAwareLoginView.as_view(template_name="pages/login.html", authentication_form=StyledLoginForm), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 
     path("dashboard/", include("apps.dashboard.urls")),
@@ -55,3 +59,8 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+handler400 = custom_400
+handler403 = custom_403
+handler404 = custom_404
+handler500 = custom_500

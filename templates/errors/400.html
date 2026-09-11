@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Bad Request — {{ church_settings.church_name }}{% endblock %}
+{% block content %}
+<section class="min-h-[60vh] flex items-center justify-center px-4">
+  <div class="text-center max-w-md">
+    <p class="font-heading text-6xl text-gold mb-4">400</p>
+    <h1 class="font-heading text-2xl text-navy mb-3">Bad Request</h1>
+    <p class="font-body text-navy/60 mb-8">Something about that request wasn't quite right. Please try again.</p>
+    <a href="{% url 'home' %}" class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-6 py-3 rounded-full hover:bg-gold-dark transition-colors">
+      ← Back to Home
+    </a>
+  </div>
+</section>
+{% endblock %}

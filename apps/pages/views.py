@@ -51,11 +51,11 @@ class ContactView(FormView):
 
     def form_valid(self, form):
         if is_rate_limited(self.request):
-            messages.error(
+            from apps.core.views import render_429
+            return render_429(
                 self.request,
                 "You've submitted a few messages recently. Please wait a few minutes before trying again.",
             )
-            return redirect(self.success_url)
 
         contact_message = form.save(commit=False)
         contact_message.submitted_ip = self.get_client_ip()
