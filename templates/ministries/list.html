@@ -1,38 +1,122 @@
 {% extends "base.html" %}
-{% block title %}Ministries - {{ church_settings.church_name }}{% endblock %}
+{% block title %}Ministries : {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}We have a ministry for every age and stage of life. Come and get involved!{% endblock %}
 
 {% block content %}
-<section class="bg-navy text-white">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-    <h1 class="font-heading text-4xl sm:text-5xl">Ministries</h1>
-    <p class="font-body text-white/70 mt-3">We have a ministry for every age and stage of life.</p>
+<section class="relative bg-navy text-white overflow-hidden">
+  <div class="absolute inset-0 bg-navy-dark/55"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+    <div class="max-w-2xl">
+      <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4 font-semibold">Get Involved</p>
+      <h1 class="font-heading text-4xl sm:text-5xl leading-tight mb-6 font-bold">
+        Find Your Place, <span class="text-gold">Find Your People</span>
+      </h1>
+      <p class="font-body text-white/80 text-base sm:text-lg">
+        We have a ministry for every age and stage of life. Come as you are, get involved, and grow together with a community that cares.
+      </p>
+    </div>
   </div>
 </section>
 
-<section class="bg-white">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<section class="bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+      <p class="font-body text-sm text-black/60">
+        {{ total_ministry_count }} ministr{{ total_ministry_count|pluralize:"y,ies" }} to get involved with
+      </p>
+      <form method="get" class="w-full sm:w-auto">
+        <div class="relative">
+          <svg class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-muted" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/>
+          </svg>
+          <input type="text" name="q" value="{{ current_query }}" placeholder="Search ministries..."
+                 class="w-full sm:w-72 bg-white border border-border rounded-xl pl-10 pr-4 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-gold">
+        </div>
+      </form>
+    </div>
+
     {% if ministries %}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for ministry in ministries %}
-          <a href="{% url 'ministries:detail' ministry.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            {% if ministry.image %}
-              <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" loading="lazy" class="w-full h-48 object-cover">
-            {% else %}
-              <div class="w-full h-48 bg-navy/5 flex items-center justify-center">
-                <span class="font-body text-sm text-navy/40">No image</span>
-              </div>
-            {% endif %}
+          <a href="{% url 'ministries:detail' ministry.slug %}" class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+            <div class="relative aspect-4/3">
+              {% if ministry.image %}
+                <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              {% else %}
+                <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+                  <span class="font-body text-xs text-muted">No image</span>
+                </div>
+              {% endif %}
+              {% if ministry.is_featured %}
+                <span class="absolute top-3 left-3 bg-gold text-navy-dark text-[10px] uppercase tracking-wide font-semibold px-2.5 py-1.5 rounded-lg">
+                  Featured
+                </span>
+              {% endif %}
+            </div>
             <div class="p-5">
-              <h3 class="font-heading text-lg text-navy mb-1">{{ ministry.name }}</h3>
-              {% if ministry.leader %}<p class="font-body text-sm text-gold-dark mb-2">Led by {{ ministry.leader.full_name }}</p>{% endif %}
-              {% if ministry.description %}<p class="font-body text-sm text-navy/60">{{ ministry.description|truncatewords:18 }}</p>{% endif %}
+              <h3 class="font-heading text-lg text-navy mb-2 group-hover:text-gold-dark transition-colors">{{ ministry.name }}</h3>
+              {% if ministry.leader %}
+                <p class="font-body text-xs text-gold-dark font-semibold mb-2">Led by {{ ministry.leader.full_name }}</p>
+              {% endif %}
+              {% if ministry.description %}
+                <p class="font-body text-sm text-black/70 mb-3">{{ ministry.description|truncatewords:16 }}</p>
+              {% endif %}
+              {% if ministry.meeting_info %}
+                <p class="font-body text-xs text-black/60 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 3"/></svg>
+                  {{ ministry.meeting_info }}
+                </p>
+              {% endif %}
             </div>
           </a>
         {% endfor %}
       </div>
+
+      {% if is_paginated %}
+        <div class="flex justify-center items-center gap-2 mt-12 font-body text-sm">
+          {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}"
+               class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-border text-navy hover:border-navy transition-colors">‹</a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+            <a href="?page={{ num }}{% if current_query %}&q={{ current_query }}{% endif %}"
+               class="w-9 h-9 flex items-center justify-center rounded-full font-semibold transition-colors
+                      {% if num == page_obj.number %}bg-navy text-white{% else %}bg-white border border-border text-navy hover:border-navy{% endif %}">
+              {{ num }}
+            </a>
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_query %}&q={{ current_query }}{% endif %}"
+               class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-border text-navy hover:border-navy transition-colors">›</a>
+          {% endif %}
+        </div>
+      {% endif %}
     {% else %}
-      <p class="font-body text-navy/50 text-center">Ministries coming soon.</p>
+      <p class="font-body text-black/60 text-center py-12">No ministries found{% if current_query %} for "{{ current_query }}"{% endif %}.</p>
     {% endif %}
+
+  </div>
+</section>
+
+<section class="relative bg-navy-dark text-white overflow-hidden">
+  <div class="absolute inset-0 bg-linear-to-r from-navy-dark via-navy-dark/80 to-navy-dark/40"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col sm:flex-row items-center justify-between gap-8">
+    <div class="flex items-center gap-5 text-center sm:text-left">
+      <div class="hidden sm:flex w-14 h-14 rounded-full bg-white/10 items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a4 4 0 0 0-10 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM3 20a3 3 0 0 1 3-3M21 20a3 3 0 0 0-3-3"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="font-heading text-2xl sm:text-3xl mb-2">Don't See a Ministry That Fits?</h2>
+        <p class="font-body text-white/70">Reach out, we'd love to help you find your place in our church family.</p>
+      </div>
+    </div>
+    <a href="{% url 'pages:contact' %}"
+       class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-gold-dark transition-colors whitespace-nowrap">
+      Contact Us →
+    </a>
   </div>
 </section>
 {% endblock %}

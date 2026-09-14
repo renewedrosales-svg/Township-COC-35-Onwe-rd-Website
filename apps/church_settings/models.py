@@ -59,6 +59,16 @@ class ChurchSettings(SingletonModel):
         validators=[validate_image_file],
     )
 
+    # Notifications — Super Admin only (enforced in admin.py and the
+    # dashboard view, NOT here; a model field can't restrict who edits
+    # it, only the views/forms that expose it can). Controls where
+    # contact-form submissions get emailed. If left blank, the contact
+    # form falls back to the CONTACT_FORM_NOTIFY_EMAIL env var (Phase 11).
+    notification_email = models.EmailField(
+        blank=True,
+        help_text="Contact form submissions are emailed here. Leave blank to use the server's default configuration.",
+    )
+
     class Meta:
         verbose_name = "Church Settings"
         verbose_name_plural = "Church Settings"

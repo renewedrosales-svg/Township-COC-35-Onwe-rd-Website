@@ -2,50 +2,68 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
 
     <div>
-      <h3 class="font-heading text-lg text-gold mb-3">{{ church_settings.church_name }}</h3>
+      <div class="flex items-center gap-3 mb-3">
+        <h3 class="font-heading text-lg text-white">{{ church_settings.church_name }}</h3>
+      </div>
+      {% if church_settings.tagline %}
+        <p class="font-body text-xs uppercase tracking-[0.15em] text-gold/80">{{ church_settings.tagline }}</p>
+      {% endif %}
       {% if church_settings.footer_short_description %}
-        <p class="font-body text-sm text-white/70">{{ church_settings.footer_short_description }}</p>
+        <p class="font-body text-sm text-white/60 mt-3">{{ church_settings.footer_short_description }}</p>
       {% endif %}
     </div>
 
     <div>
-      <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Contact</h4>
-      <ul class="font-body text-sm text-white/80 space-y-2">
+      <h4 class="font-body font-semibold text-xs uppercase tracking-wide text-gold mb-4">Connect With Us</h4>
+      <ul class="font-body text-sm text-white/75 space-y-2.5">
+        {% if church_settings.facebook_url %}
+          <li><a href="{{ church_settings.facebook_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-gold transition-colors">
+            <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-semibold">F</span> Facebook
+          </a></li>
+        {% endif %}
+        {% if church_settings.instagram_url %}
+          <li><a href="{{ church_settings.instagram_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-gold transition-colors">
+            <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-semibold">IG</span> Instagram
+          </a></li>
+        {% endif %}
+        {% if church_settings.youtube_url %}
+          <li><a href="{{ church_settings.youtube_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-gold transition-colors">
+            <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-semibold">YT</span> YouTube
+          </a></li>
+        {% endif %}
+        {% if church_settings.whatsapp_url %}
+          <li><a href="{{ church_settings.whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 hover:text-gold transition-colors">
+            <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-semibold">WA</span> WhatsApp
+          </a></li>
+        {% endif %}
+        {% if church_settings.email %}
+          <li><a href="mailto:{{ church_settings.email }}" class="flex items-center gap-2 hover:text-gold transition-colors">
+            <span class="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-semibold">@</span> Email
+          </a></li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="font-body font-semibold text-xs uppercase tracking-wide text-gold mb-4">Visit Us</h4>
+      <ul class="font-body text-sm text-white/75 space-y-2.5">
         {% if church_settings.address %}<li>{{ church_settings.address }}</li>{% endif %}
         {% if church_settings.phone_primary %}<li>{{ church_settings.phone_primary }}</li>{% endif %}
         {% if church_settings.email %}<li>{{ church_settings.email }}</li>{% endif %}
       </ul>
     </div>
 
-    <div>
-      <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Service Times</h4>
-      <ul class="font-body text-sm text-white/80 space-y-2">
-        {% for service in active_service_times %}
-          <li>{{ service.name }} — {{ service.get_day_display }} {{ service.start_time|time:"g:i A" }}</li>
-        {% empty %}
-          <li class="text-white/40">Service times not yet added.</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="font-body font-semibold text-sm uppercase tracking-wide text-white/60 mb-3">Follow Us</h4>
-      <ul class="flex gap-3">
-        {% if church_settings.facebook_url %}<li><a href="{{ church_settings.facebook_url }}" class="hover:text-gold">Facebook</a></li>{% endif %}
-        {% if church_settings.instagram_url %}<li><a href="{{ church_settings.instagram_url }}" class="hover:text-gold">Instagram</a></li>{% endif %}
-        {% if church_settings.youtube_url %}<li><a href="{{ church_settings.youtube_url }}" class="hover:text-gold">YouTube</a></li>{% endif %}
-        {% if church_settings.whatsapp_url %}<li><a href="{{ church_settings.whatsapp_url }}" class="hover:text-gold">WhatsApp</a></li>{% endif %}
-      </ul>
-    </div>
-
   </div>
 
-  <div class="border-t border-white/10 py-6 px-4 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-2 max-w-7xl mx-auto font-body text-xs text-white/50">
+  <div class="border-t border-white/10 py-6 px-4 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 max-w-7xl mx-auto font-body text-xs text-white/50">
     <p>&copy; {% now "Y" %} {{ church_settings.church_name }}. All rights reserved.</p>
-    {% if request.user.is_authenticated %}
-      <a href="{% url 'dashboard:index' %}" class="hover:text-gold transition-colors">Dashboard</a>
-    {% else %}
-      <a href="{% url 'login' %}" class="hover:text-gold transition-colors">Staff Login</a>
-    {% endif %}
+    <div class="flex items-center gap-4">
+      {% if church_settings.tagline %}<p class="hidden sm:block">{{ church_settings.tagline }}</p>{% endif %}
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'dashboard:index' %}" class="hover:text-gold transition-colors">Dashboard</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="hover:text-gold transition-colors">Staff Login</a>
+      {% endif %}
+    </div>
   </div>
 </footer>

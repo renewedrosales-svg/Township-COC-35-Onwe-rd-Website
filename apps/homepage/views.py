@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.views.generic import TemplateView
 
 from apps.events.models import Event
-from apps.gallery.models import GalleryImage
+from apps.gallery.models import GalleryPhoto
 from apps.ministries.models import Ministry
 from apps.news.models import Article
 from apps.sermons.models import Sermon
@@ -46,10 +46,9 @@ class HomeView(TemplateView):
             )
 
         if content.show_gallery_section:
-            context["preview_images"] = (
-                GalleryImage.objects.filter(album__is_published=True)
-                .select_related("album")
-                .order_by("-album__created_at", "order")[:8]
+            context["preview_photos"] = (
+                GalleryPhoto.objects.filter(is_published=True)
+                .order_by("-photo_date", "order")[:8]
             )
 
         if content.show_school_section:

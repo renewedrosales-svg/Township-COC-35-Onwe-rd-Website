@@ -3,47 +3,51 @@
 
 {% block dashboard_content %}
 <div class="flex items-center justify-between mb-6">
-  <h1 class="font-heading text-2xl text-navy">Gallery Albums</h1>
-  <a href="{% url 'dashboard:album_create' %}" class="bg-gold text-navy-dark font-body text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
-    + New Album
+  <h1 class="font-heading text-2xl text-navy">Gallery Photos</h1>
+  <a href="{% url 'dashboard:gallery_photo_create' %}" class="bg-gold text-navy-dark font-body text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+    + New Photo
   </a>
 </div>
 
 <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-  {% if albums %}
+  {% if photos %}
     <table class="w-full font-body text-sm">
       <thead class="bg-cream text-navy/60 text-left">
         <tr>
+          <th class="px-5 py-3">Photo</th>
           <th class="px-5 py-3">Title</th>
-          <th class="px-5 py-3">Event</th>
-          <th class="px-5 py-3">Photos</th>
+          <th class="px-5 py-3">Category</th>
+          <th class="px-5 py-3">Date</th>
           <th class="px-5 py-3">Status</th>
           <th class="px-5 py-3"></th>
         </tr>
       </thead>
       <tbody>
-        {% for album in albums %}
+        {% for photo in photos %}
           <tr class="border-t border-navy/5">
-            <td class="px-5 py-3 text-navy">{{ album.title }}</td>
-            <td class="px-5 py-3 text-navy/60">{{ album.event|default:"—" }}</td>
-            <td class="px-5 py-3 text-navy/60">{{ album.images.count }}</td>
             <td class="px-5 py-3">
-              {% if album.is_published %}
-                <span class="text-green-700 bg-green-50 px-2 py-0.5 rounded-full text-xs">Published</span>
+              <img src="{{ photo.image.url }}" alt="{{ photo.display_alt }}" class="w-12 h-12 object-cover rounded">
+            </td>
+            <td class="px-5 py-3 text-navy">{{ photo.title }}</td>
+            <td class="px-5 py-3 text-navy/60">{{ photo.get_category_display }}</td>
+            <td class="px-5 py-3 text-navy/60">{{ photo.photo_date|date:"M j, Y" }}</td>
+            <td class="px-5 py-3">
+              {% if photo.is_published %}
+                <span class="text-success bg-success-light px-2 py-0.5 rounded-full text-xs font-medium">Published</span>
               {% else %}
-                <span class="text-navy/50 bg-navy/5 px-2 py-0.5 rounded-full text-xs">Draft</span>
+                <span class="text-warning bg-warning-light px-2 py-0.5 rounded-full text-xs font-medium">Draft</span>
               {% endif %}
             </td>
             <td class="px-5 py-3 text-right space-x-3">
-              <a href="{% url 'dashboard:album_update' album.slug %}" class="text-gold-dark hover:underline">Edit</a>
-              <a href="{% url 'dashboard:album_delete' album.slug %}" class="text-red-600 hover:underline">Delete</a>
+              <a href="{% url 'dashboard:gallery_photo_update' photo.slug %}" class="text-gold-dark hover:underline">Edit</a>
+              <a href="{% url 'dashboard:gallery_photo_delete' photo.slug %}" class="text-error hover:underline">Delete</a>
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   {% else %}
-    <p class="font-body text-sm text-navy/50 p-6">No albums yet.</p>
+    <p class="font-body text-sm text-navy/50 p-6">No photos yet.</p>
   {% endif %}
 </div>
 {% endblock %}

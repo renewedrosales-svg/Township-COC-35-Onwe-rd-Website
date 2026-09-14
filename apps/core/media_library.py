@@ -48,10 +48,10 @@ def get_media_items():
     for article in Article.objects.exclude(featured_image=""):
         items.append({"url": article.featured_image.url, "label": article.title, "source": "News Featured Image", "uploaded_at": article.created_at})
 
-    from apps.gallery.models import GalleryImage
-    for img in GalleryImage.objects.select_related("album"):
-        items.append({"url": img.image.url, "label": img.display_alt, "source": f"Gallery: {img.album.title}", "uploaded_at": None})
-
+    from apps.gallery.models import GalleryPhoto
+    for photo in GalleryPhoto.objects.all():
+        items.append({"url": photo.image.url, "label": photo.title, "source": f"Gallery: {photo.get_category_display()}", "uploaded_at": photo.uploaded_at})
+        
     # Most recent first where we have a date; undated items (singletons,
     # no created_at field) sort last rather than crashing on None.
 

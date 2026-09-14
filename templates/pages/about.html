@@ -1,68 +1,209 @@
 {% extends "base.html" %}
-{% block title %}About Us - {{ church_settings.church_name }}{% endblock %}
+{% load static %}
+{% block title %}About Us : {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}{{ about_content.hero_description|truncatewords:25 }}{% endblock %}
 
 {% block content %}
-<section class="bg-navy text-white">
+
+<section class="relative bg-navy text-white overflow-hidden">
   {% if about_content.hero_image %}
-    <img src="{{ about_content.hero_image.url }}" alt="" class="w-full h-64 sm:h-80 object-cover opacity-40">
+    <img src="{{ about_content.hero_image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover">
   {% endif %}
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-    <h1 class="font-heading text-4xl sm:text-5xl">About Us</h1>
+  <div class="absolute inset-0 bg-linear-to-r from-navy-dark via-navy-dark/85 to-navy-dark/40"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+    <div class="max-w-xl">
+      <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4 font-semibold">About Us</p>
+      <h1 class="font-heading text-4xl sm:text-5xl leading-tight mb-6 font-bold">{{ about_content.hero_heading }}</h1>
+      {% if about_content.hero_description %}
+        <p class="font-body text-white/80 text-base sm:text-lg">{{ about_content.hero_description }}</p>
+      {% endif %}
+    </div>
   </div>
 </section>
 
-<section class="bg-white">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-    {% if about_content.who_we_are %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Who We Are</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.who_we_are }}</p></div>
-    {% endif %}
-    {% if about_content.our_history %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Our History</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.our_history }}</p></div>
-    {% endif %}
-    {% if about_content.our_mission %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Our Mission</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.our_mission }}</p></div>
-    {% endif %}
-    {% if about_content.our_vision %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Our Vision</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.our_vision }}</p></div>
-    {% endif %}
-    {% if about_content.our_values %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Our Values</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.our_values }}</p></div>
-    {% endif %}
-    {% if about_content.statement_of_faith %}
-      <div><h2 class="font-heading text-2xl text-navy mb-3">Statement of Faith</h2>
-        <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line">{{ about_content.statement_of_faith }}</p></div>
-    {% endif %}
-  </div>
-</section>
-
-{% if leaders %}
+{% if about_content.who_we_are or about_content.our_mission or about_content.our_vision or about_content.our_values %}
 <section class="bg-cream">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h2 class="font-heading text-3xl text-navy text-center mb-12">Our Leadership</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {% for leader in leaders %}
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm text-center">
-          {% if leader.photo %}
-            <img src="{{ leader.photo.url }}" alt="{{ leader.full_name }}" class="w-full h-64 object-cover">
-          {% else %}
-            <div class="w-full h-64 bg-navy/5 flex items-center justify-center">
-              <span class="font-body text-sm text-navy/40">No photo</span>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
+      <div class="lg:col-span-1">
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">Our Mission &amp; Vision</p>
+        <h2 class="font-heading text-3xl text-navy mb-4 leading-tight">Our Purpose</h2>
+        {% if about_content.who_we_are %}
+          <p class="font-body text-muted leading-relaxed mb-6">{{ about_content.who_we_are }}</p>
+        {% endif %}
+        <a href="{% url 'ministries:list' %}"
+           class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-6 py-3 rounded-xl hover:bg-gold-dark transition-colors">
+          Our Ministries →
+        </a>
+      </div>
+
+      <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
+        {% if about_content.our_mission %}
+          <div class="sm:px-6 pt-6 sm:pt-0 first:pt-0">
+            <div class="w-12 h-12 rounded-full bg-navy flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>
+              </svg>
             </div>
-          {% endif %}
-          <div class="p-5">
-            <h3 class="font-heading text-lg text-navy">{{ leader.full_name }}</h3>
-            <p class="font-body text-sm text-gold-dark mb-2">{{ leader.position_title }}</p>
-            {% if leader.bio %}<p class="font-body text-sm text-navy/60">{{ leader.bio|truncatewords:20 }}</p>{% endif %}
+            <h3 class="font-heading text-lg text-navy mb-2">Our Mission</h3>
+            <p class="font-body text-sm text-muted leading-relaxed whitespace-pre-line">{{ about_content.our_mission }}</p>
           </div>
-        </div>
-      {% endfor %}
+        {% endif %}
+
+        {% if about_content.our_vision %}
+          <div class="sm:px-6 pt-6 sm:pt-0">
+            <div class="w-12 h-12 rounded-full bg-navy flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <h3 class="font-heading text-lg text-navy mb-2">Our Vision</h3>
+            <p class="font-body text-sm text-muted leading-relaxed whitespace-pre-line">{{ about_content.our_vision }}</p>
+          </div>
+        {% endif %}
+
+        {% if about_content.our_values %}
+          <div class="sm:px-6 pt-6 sm:pt-0">
+            <div class="w-12 h-12 rounded-full bg-navy flex items-center justify-center mb-4">
+              <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/>
+              </svg>
+            </div>
+            <h3 class="font-heading text-lg text-navy mb-2">Our Values</h3>
+            <p class="font-body text-sm text-muted leading-relaxed whitespace-pre-line">{{ about_content.our_values }}</p>
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </section>
 {% endif %}
+
+{% if about_content.our_history %}
+<section class="bg-white" x-data="{ expanded: false }">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+    <div class="rounded-2xl overflow-hidden aspect-4/3">
+      {% if about_content.hero_image %}
+        <img src="{{ about_content.hero_image.url }}" alt="" class="w-full h-full object-cover">
+      {% else %}
+        <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+          <span class="font-body text-sm text-muted">Image, add via Homepage/About hero image</span>
+        </div>
+      {% endif %}
+    </div>
+    <div>
+      <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">Our Story</p>
+      <h2 class="font-heading text-3xl text-navy mb-5 leading-tight">From a Small Beginning to a Growing Family</h2>
+      <p class="font-body text-muted leading-relaxed whitespace-pre-line transition-all duration-300"
+         :class="expanded ? '' : 'line-clamp-10'">{{ about_content.our_history }}</p>
+      <button type="button"
+              @click="expanded = !expanded"
+              :aria-expanded="expanded"
+              class="mt-4 inline-flex items-center gap-1.5 font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors">
+        <span x-text="expanded ? 'Read Less' : 'Read More'"></span>
+        <svg class="w-4 h-4 transition-transform duration-300" :class="expanded ? 'rotate-180' : ''" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if about_content.active_members_count or about_content.years_of_impact or ministries_count %}
+<section class="bg-navy-dark text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 lg:py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
+      <div class="lg:col-span-1">
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">By the Numbers</p>
+        <h2 class="font-heading text-2xl sm:text-3xl mb-3 leading-tight">Our Church at a Glance</h2>
+        <p class="font-body text-white/60 text-sm">These numbers tell part of the story, but the real story is in the lives being changed every day.</p>
+      </div>
+      <div class="lg:col-span-2 grid grid-cols-3 gap-6 lg:divide-x lg:divide-white/10">
+        {% if about_content.active_members_count %}
+          <div class="text-center lg:px-6">
+            <svg class="w-8 h-8 text-gold mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a4 4 0 0 0-10 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/>
+            </svg>
+            <p class="font-heading text-3xl sm:text-4xl font-bold">{{ about_content.active_members_count }}</p>
+            <p class="font-body text-xs sm:text-sm text-white/60 mt-1">Active Members</p>
+          </div>
+        {% endif %}
+        {% if ministries_count %}
+          <div class="text-center lg:px-6">
+            <svg class="w-8 h-8 text-gold mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" d="M12 3v18M6 8h12M6 8l-2 9h16l-2-9"/>
+            </svg>
+            <p class="font-heading text-3xl sm:text-4xl font-bold">{{ ministries_count }}+</p>
+            <p class="font-body text-xs sm:text-sm text-white/60 mt-1">Ministries</p>
+          </div>
+        {% endif %}
+        {% if about_content.years_of_impact %}
+          <div class="text-center lg:px-6">
+            <svg class="w-8 h-8 text-gold mx-auto mb-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="5" width="18" height="16" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3 10h18"/>
+            </svg>
+            <p class="font-heading text-3xl sm:text-4xl font-bold">{{ about_content.years_of_impact }}</p>
+            <p class="font-body text-xs sm:text-sm text-white/60 mt-1">Years of Impact</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if leaders %}
+<section class="bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-10">
+      <div class="lg:col-span-1">
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">Our Leadership</p>
+        <h2 class="font-heading text-3xl text-navy mb-4 leading-tight">Led by God. Servant to People.</h2>
+        <p class="font-body text-muted">Our leadership team is committed to shepherding our church with integrity, humility, and a passion for God's people.</p>
+      </div>
+      <div class="lg:col-span-2 grid grid-cols-2 sm:grid-cols-4 gap-5">
+        {% for leader in leaders %}
+          <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+            {% if leader.photo %}
+              <img src="{{ leader.photo.url }}" alt="{{ leader.full_name }}" loading="lazy" class="w-full aspect-square object-cover">
+            {% else %}
+              <div class="w-full aspect-square bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-xs text-muted">No photo</span>
+              </div>
+            {% endif %}
+            <div class="p-4">
+              <h3 class="font-heading text-sm text-navy leading-tight">{{ leader.full_name }}</h3>
+              <p class="font-body text-xs text-gold-dark mt-1">{{ leader.position_title }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="relative bg-navy-dark text-white overflow-hidden">
+  <div class="absolute inset-0 bg-linear-to-r from-navy-dark via-navy-dark/80 to-navy-dark/40"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col sm:flex-row items-center justify-between gap-8">
+    <div class="flex items-center gap-5 text-center sm:text-left">
+      <div class="hidden sm:flex w-14 h-14 rounded-full bg-white/10 items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 20a4 4 0 0 0-10 0M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM3 20a3 3 0 0 1 3-3M21 20a3 3 0 0 0-3-3"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="font-heading text-2xl sm:text-3xl mb-2">Be Part of Our Story</h2>
+        <p class="font-body text-white/70">We'd love to have you join us! Come as you are and experience the warmth of our church family.</p>
+      </div>
+    </div>
+    <a href="{% url 'pages:support' %}"
+       class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-gold-dark transition-colors whitespace-nowrap">
+      Plan Your Visit →
+    </a>
+  </div>
+</section>
+
 {% endblock %}

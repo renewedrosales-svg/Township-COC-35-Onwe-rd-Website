@@ -1,19 +1,17 @@
-from django.views.generic import DetailView, TemplateView
-
-from apps.ministries.models import Leader
-
-from .models import AboutPageContent, Page, SupportPageContent
-
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 
 from apps.core.audit import log_action
 from apps.core.spam_protection import is_rate_limited
+from apps.ministries.models import Leader, Ministry
 
 from .forms import ContactForm
+from .models import AboutPageContent, Page, SupportPageContent
+
 
 class AboutView(TemplateView):
     template_name = "pages/about.html"
@@ -24,6 +22,7 @@ class AboutView(TemplateView):
         context["about_content"] = about_content
         if about_content.show_leadership_section:
             context["leaders"] = Leader.objects.filter(is_active=True)
+        context["ministries_count"] = Ministry.objects.filter(is_active=True).count()
         return context
 
 
@@ -81,9 +80,12 @@ class ContactView(FormView):
     def _send_notification_email(self, contact_message):
         from django.conf import settings
 
-        if not settings.CONTACT_FORM_NOTIFY_EMAIL:
-            return  # not configured yet — message is still safely stored either way
+        from apps.church_settings.models import ChurchSettings
 
+        recipient = ChurchSettings.load().notification_email or settings.CONTACT_FORM_NOTIFY_EMAIL
+        if not recipient:
+            return  # not configured yet — message is still safely stored either way
+        
         try:
             send_mail(
                 subject=f"New Contact Form Message: {contact_message.subject or 'No subject'}",
@@ -93,7 +95,7 @@ class ContactView(FormView):
                     f"{contact_message.message}"
                 ),
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[settings.CONTACT_FORM_NOTIFY_EMAIL],
+                recipient_list=[recipient],
                 fail_silently=True,
             )
         except Exception:
@@ -102,6 +104,7 @@ class ContactView(FormView):
             # exactly the resilience §58/§21 calls for: email is a
             # notification convenience, not the system of record.
             pass
+
 
 class SupportView(TemplateView):
     template_name = "pages/support.html"

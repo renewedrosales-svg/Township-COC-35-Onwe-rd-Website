@@ -1,9 +1,9 @@
-<section class="bg-cream border-b border-navy/5">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4 divide-y-0 lg:divide-x divide-navy/10">
+<section class="bg-white border-b border-border">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:divide-x lg:divide-border">
       {% for item in creed_items %}
-        <div class="text-center px-2 lg:px-6">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-navy/5 text-navy mb-4">
+        <div class="text-left lg:px-6 lg:first:pl-0">
+          <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-light-gray text-navy mb-4">
             {% if item.icon == "cross" %}
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 4v16M6 9h12"/></svg>
             {% elif item.icon == "book" %}
@@ -14,9 +14,9 @@
               <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
             {% endif %}
           </div>
-          <h3 class="font-heading text-lg text-navy mb-1">{{ item.title }}</h3>
+          <h3 class="font-heading text-lg text-navy mb-1.5">{{ item.title }}</h3>
           {% if item.description %}
-            <p class="font-body text-sm text-navy/60">{{ item.description }}</p>
+            <p class="font-body text-sm text-muted">{{ item.description }}</p>
           {% endif %}
         </div>
       {% endfor %}

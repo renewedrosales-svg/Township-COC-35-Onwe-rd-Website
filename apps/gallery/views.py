@@ -1,30 +1,30 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import ListView
 
-from .models import GalleryAlbum
+from .models import GalleryPhoto
 
 
-class GalleryAlbumListView(ListView):
-    model = GalleryAlbum
+class GalleryListView(ListView):
+    model = GalleryPhoto
     template_name = "gallery/list.html"
-    context_object_name = "albums"
+    context_object_name = "photos"
     paginate_by = 12
 
     def get_queryset(self):
-        return (
-            GalleryAlbum.objects.filter(is_published=True)
-            .prefetch_related("images")
-            .select_related("event")
-        )
+        qs = GalleryPhoto.objects.filter(is_published=True).select_related("event")
 
+        query = self.request.GET.get("q", "").strip()
+        if query:
+            qs = qs.filter(title__icontains=query)
 
-class GalleryAlbumDetailView(DetailView):
-    model = GalleryAlbum
-    template_name = "gallery/detail.html"
-    context_object_name = "album"
+        category = self.request.GET.get("category", "").strip()
+        if category:
+            qs = qs.filter(category=category)
 
-    def get_queryset(self):
-        return (
-            GalleryAlbum.objects.filter(is_published=True)
-            .prefetch_related("images")
-            .select_related("event")
-        )
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["categories"] = GalleryPhoto.CATEGORY_CHOICES
+        context["current_category"] = self.request.GET.get("category", "")
+        context["current_query"] = self.request.GET.get("q", "")
+        return context

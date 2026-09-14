@@ -2,8 +2,6 @@ from django.contrib import admin
 
 from apps.core.audit import log_action
 
-from .models import AboutPageContent, Page
-
 from .models import AboutPageContent, BankAccount, ContactMessage, Page, SupportPageContent
 
 
@@ -28,8 +26,9 @@ class PageAdmin(admin.ModelAdmin):
 @admin.register(AboutPageContent)
 class AboutPageContentAdmin(admin.ModelAdmin):
     fieldsets = (
-        ("Hero", {"fields": ("hero_image",)}),
+        ("Hero", {"fields": ("hero_heading", "hero_description", "hero_image")}),
         ("Content", {"fields": ("who_we_are", "our_history", "our_mission", "our_vision", "our_values", "statement_of_faith")}),
+        ("Church at a Glance", {"fields": ("active_members_count", "years_of_impact")}),
         ("Leadership Display", {"fields": ("show_leadership_section",)}),
     )
 

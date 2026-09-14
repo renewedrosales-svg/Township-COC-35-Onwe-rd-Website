@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ ministry.name }} — {{ church_settings.church_name }}{% endblock %}
+{% block title %}{{ ministry.name }} : {{ church_settings.church_name }}{% endblock %}
 {% block meta_description %}{{ ministry.description|truncatewords:25 }}{% endblock %}
 
 {% block og_type %}article{% endblock %}
@@ -12,25 +12,111 @@
 {% endblock %}
 
 {% block content %}
+<section class="relative bg-navy text-white overflow-hidden">
+  {% if ministry.image %}
+    <img src="{{ ministry.image.url }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+  {% endif %}
+  <div class="absolute inset-0 bg-navy-dark/65"></div>
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+    <a href="{% url 'ministries:list' %}" class="font-body text-sm text-gold hover:underline mb-4 inline-block">&larr; All Ministries</a>
+    {% if ministry.is_featured %}
+      <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">Featured Ministry</p>
+    {% endif %}
+    <h1 class="font-heading text-4xl sm:text-5xl leading-tight mb-3 font-bold">{{ ministry.name }}</h1>
+    {% if ministry.leader %}
+      <p class="font-body text-white/80 text-lg">Led by {{ ministry.leader.full_name }}</p>
+    {% endif %}
+  </div>
+</section>
+
 <section class="bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <a href="{% url 'ministries:list' %}" class="font-body text-sm text-gold-dark hover:underline">&larr; All Ministries</a>
-    <h1 class="font-heading text-4xl text-navy mt-4 mb-2">{{ ministry.name }}</h1>
-    {% if ministry.leader %}<p class="font-body text-navy/60 mb-6">Led by {{ ministry.leader.full_name }}</p>{% endif %}
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-    {% if ministry.image %}
-      <img src="{{ ministry.image.url }}" alt="{{ ministry.name }}" class="w-full h-80 object-cover rounded-lg mb-8">
-    {% endif %}
+    <div class="lg:col-span-2">
+      {% if ministry.description %}
+        <p class="font-body text-black/70 leading-relaxed whitespace-pre-line">{{ ministry.description }}</p>
+      {% endif %}
 
-    {% if ministry.description %}
-      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-8">{{ ministry.description }}</p>
-    {% endif %}
+      {% if ministry.leader and ministry.leader.bio %}
+        <div class="mt-10 pt-10 border-t border-border flex gap-5 items-start">
+          {% if ministry.leader.photo %}
+            <img src="{{ ministry.leader.photo.url }}" alt="{{ ministry.leader.full_name }}" class="w-20 h-20 rounded-full object-cover shrink-0">
+          {% endif %}
+          <div>
+            <h3 class="font-heading text-lg text-navy mb-1">{{ ministry.leader.full_name }}</h3>
+            <p class="font-body text-xs text-gold-dark font-semibold mb-2">{{ ministry.leader.position_title }}</p>
+            <p class="font-body text-sm text-black/70 leading-relaxed">{{ ministry.leader.bio }}</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
 
-    <div class="bg-cream rounded-lg p-6 space-y-2">
-      {% if ministry.meeting_info %}<p class="font-body text-sm text-navy/70"><strong>Meets:</strong> {{ ministry.meeting_info }}</p>{% endif %}
-      {% if ministry.contact_email %}<p class="font-body text-sm text-navy/70"><strong>Email:</strong> {{ ministry.contact_email }}</p>{% endif %}
-      {% if ministry.contact_phone %}<p class="font-body text-sm text-navy/70"><strong>Phone:</strong> {{ ministry.contact_phone }}</p>{% endif %}
+    <div class="lg:col-span-1">
+      <div class="bg-cream rounded-2xl p-6 space-y-4 sticky top-24">
+        <h3 class="font-heading text-base text-navy mb-2">Get Involved</h3>
+        {% if ministry.meeting_info %}
+          <div class="flex gap-3">
+            <svg class="w-5 h-5 text-gold-dark shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 3"/></svg>
+            <div>
+              <p class="font-body text-xs uppercase tracking-wide text-black/50 mb-0.5">Meets</p>
+              <p class="font-body text-sm text-black/80">{{ ministry.meeting_info }}</p>
+            </div>
+          </div>
+        {% endif %}
+        {% if ministry.contact_email %}
+          <div class="flex gap-3">
+            <svg class="w-5 h-5 text-gold-dark shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M3 8v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z"/></svg>
+            <div>
+              <p class="font-body text-xs uppercase tracking-wide text-black/50 mb-0.5">Email</p>
+              <a href="mailto:{{ ministry.contact_email }}" class="font-body text-sm text-black/80 hover:text-gold-dark transition-colors break-all">{{ ministry.contact_email }}</a>
+            </div>
+          </div>
+        {% endif %}
+        {% if ministry.contact_phone %}
+          <div class="flex gap-3">
+            <svg class="w-5 h-5 text-gold-dark shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 0 1 2-2h2l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v2a2 2 0 0 1-2 2A16 16 0 0 1 3 5Z"/></svg>
+            <div>
+              <p class="font-body text-xs uppercase tracking-wide text-black/50 mb-0.5">Phone</p>
+              <p class="font-body text-sm text-black/80">{{ ministry.contact_phone }}</p>
+            </div>
+          </div>
+        {% endif %}
+        {% if not ministry.meeting_info and not ministry.contact_email and not ministry.contact_phone %}
+          <p class="font-body text-sm text-black/60">Contact the church office to learn more about joining this ministry.</p>
+        {% endif %}
+        <a href="{% url 'pages:contact' %}"
+           class="block text-center bg-gold text-navy-dark font-body font-semibold px-6 py-3 rounded-xl hover:bg-gold-dark transition-colors mt-2">
+          Get in Touch
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% if other_ministries %}
+<section class="bg-cream">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="font-heading text-2xl text-navy mb-8">Other Ministries</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      {% for other in other_ministries %}
+        <a href="{% url 'ministries:detail' other.slug %}" class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="aspect-4/3">
+            {% if other.image %}
+              <img src="{{ other.image.url }}" alt="{{ other.name }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            {% else %}
+              <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+                <span class="font-body text-xs text-muted">No image</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="p-4">
+            <h3 class="font-heading text-base text-navy group-hover:text-gold-dark transition-colors">{{ other.name }}</h3>
+          </div>
+        </a>
+      {% endfor %}
     </div>
   </div>
 </section>
+{% endif %}
 {% endblock %}

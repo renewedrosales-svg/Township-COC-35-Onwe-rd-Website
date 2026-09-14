@@ -2,7 +2,7 @@ from django.contrib.sitemaps import Sitemap
 from django.utils import timezone
 
 from apps.events.models import Event
-from apps.gallery.models import GalleryAlbum
+
 from apps.ministries.models import Ministry
 from apps.news.models import Article
 from apps.pages.models import Page
@@ -89,17 +89,13 @@ class ArticleSitemap(Sitemap):
         return obj.updated_at
 
 
-class GalleryAlbumSitemap(Sitemap):
+class GalleryPhotoSitemap(Sitemap):
     changefreq = "monthly"
-    priority = 0.4
+    priority = 0.3
 
     def items(self):
-        return GalleryAlbum.objects.filter(is_published=True)
-
-    def location(self, obj):
-        from django.urls import reverse
-        return reverse("gallery:detail", args=[obj.slug])
-
+        return []  # individual photos have no standalone URL to list; the gallery list page itself is covered by StaticViewSitemap
+    
 
 class FlatPageSitemap(Sitemap):
     changefreq = "monthly"

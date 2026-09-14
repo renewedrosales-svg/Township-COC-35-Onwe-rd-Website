@@ -29,7 +29,7 @@ def build_dashboard_nav(request):
         "label": "Overview",
         "items": [item("Dashboard", "dashboard:index")],
     })
-    
+
     if is_minister:
         content_items = [item("My Teachings", "dashboard:sermon_list")]
         sections.append({"label": "My Content", "items": content_items})
@@ -43,9 +43,10 @@ def build_dashboard_nav(request):
                 item("Leadership", "dashboard:leader_list"),
                 item("Events", "dashboard:event_list"),
                 item("News", "dashboard:article_list"),
-                item("Gallery", "dashboard:album_list"),
+                item("Gallery", "dashboard:gallery_photo_list"),
             ],
         })
+
     if is_church_admin:
         sections.append({
             "label": "Site Settings",
@@ -54,7 +55,20 @@ def build_dashboard_nav(request):
                 item("Church Settings", "dashboard:church_settings"),
                 item("Service Times", "dashboard:service_time_list"),
                 item("SEO Defaults", "dashboard:seo_defaults"),
-                item("School Info", "dashboard:school_info"),
+            ],
+        })
+
+    if is_super:
+        for section in sections:
+            if section["label"] == "Site Settings":
+                section["items"].append(item("Notifications", "dashboard:notification_settings"))
+
+    if is_super:
+        sections.append({
+            "label": "Giving",
+            "items": [
+                item("Support Page Content", "dashboard:support_content"),
+                item("Bank Accounts", "dashboard:bank_account_list"),
             ],
         })
 

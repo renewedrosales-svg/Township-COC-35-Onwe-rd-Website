@@ -2,26 +2,17 @@ from django.contrib import admin
 
 from apps.core.audit import log_action
 
-from .models import GalleryAlbum, GalleryImage
+from .models import GalleryPhoto
 
 
-class GalleryImageInline(admin.TabularInline):
-    model = GalleryImage
-    extra = 3
-    fields = ("image", "caption", "alt_text", "is_featured", "order")
-
-
-@admin.register(GalleryAlbum)
-class GalleryAlbumAdmin(admin.ModelAdmin):
-    list_display = ("title", "event", "is_published", "order", "image_count")
-    list_filter = ("is_published",)
-    list_editable = ("order",)
+@admin.register(GalleryPhoto)
+class GalleryPhotoAdmin(admin.ModelAdmin):
+    list_display = ("title", "category", "photo_date", "is_featured", "is_published", "order")
+    list_filter = ("category", "is_published", "is_featured")
+    list_editable = ("is_featured", "is_published", "order")
+    search_fields = ("title",)
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [GalleryImageInline]
-
-    def image_count(self, obj):
-        return obj.images.count()
-    image_count.short_description = "Images"
+    date_hierarchy = "photo_date"
 
     def save_model(self, request, obj, form, change):
         if not change:

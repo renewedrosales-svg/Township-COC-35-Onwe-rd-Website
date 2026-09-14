@@ -39,6 +39,13 @@ class ChurchAdminRequiredMixin(RoleRequiredMixin):
     allowed_groups = ("Church Admin", "Super Admin")
 
 
+class SuperAdminOnlyMixin(RoleRequiredMixin):
+    """Restricts a view to Super Admin only — reusable anywhere a Church-Admin-shared
+    area needs one specific screen carved out as more restricted (e.g. notification
+    settings, alongside the otherwise-shared Church Settings)."""
+    allowed_groups = ("Super Admin",)
+
+
 class MinisterRequiredMixin(RoleRequiredMixin):
     """
     Restricts a view to any of the three roles — used for views ministers

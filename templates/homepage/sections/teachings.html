@@ -1,45 +1,47 @@
 <section class="bg-white">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-    <div class="flex items-end justify-between mb-10">
-      <div>
-        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3">Be Inspired</p>
-        <h2 class="font-heading text-3xl sm:text-4xl text-navy">Latest Teachings</h2>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div class="lg:col-span-1">
+        <p class="font-body text-xs uppercase tracking-[0.2em] text-gold mb-3 font-semibold">Latest Sermons</p>
+        <h2 class="font-heading text-3xl sm:text-4xl text-navy mb-4 leading-tight">Watch. Listen. Be Inspired.</h2>
+        <p class="font-body text-muted mb-6">Discover powerful messages that will encourage your faith and help you live out God's purpose.</p>
+        <a href="{% url 'sermons:list' %}" class="inline-flex items-center gap-2 font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors">
+          View All Sermons →
+        </a>
       </div>
-      <a href="{% url 'sermons:list' %}" class="font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors whitespace-nowrap hidden sm:block">
-        View All →
-      </a>
-    </div>
 
-    {% if latest_sermons %}
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-        {% for sermon in latest_sermons %}
-          <a href="{% url 'sermons:detail' sermon.slug %}" class="block group">
-            <div class="relative rounded-lg overflow-hidden mb-4">
-              {% if sermon.thumbnail %}
-                <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" loading="lazy" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
-              {% else %}
-                <div class="w-full h-48 bg-navy/5 flex items-center justify-center">
-                  <span class="font-body text-sm text-navy/40">No thumbnail</span>
+      <div class="lg:col-span-2">
+        {% if latest_sermons %}
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {% for sermon in latest_sermons %}
+              <a href="{% url 'sermons:detail' sermon.slug %}" class="group block">
+                <div class="relative rounded-2xl overflow-hidden mb-4 aspect-4/3">
+                  {% if sermon.thumbnail %}
+                    <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                  {% else %}
+                    <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+                      <span class="font-body text-xs text-muted">No thumbnail</span>
+                    </div>
+                  {% endif %}
+                  {% if sermon.audio_file or sermon.video_url %}
+                    <div class="absolute inset-0 flex items-center justify-center bg-navy-dark/20">
+                      <div class="w-11 h-11 rounded-full bg-white/90 flex items-center justify-center shadow-sm">
+                        <svg class="w-4 h-4 text-navy ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                      </div>
+                    </div>
+                  {% endif %}
                 </div>
-              {% endif %}
-              {% if sermon.audio_file or sermon.video_url %}
-                <div class="absolute inset-0 flex items-center justify-center bg-navy/20 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div class="w-12 h-12 rounded-full bg-gold flex items-center justify-center">
-                    <svg class="w-5 h-5 text-navy-dark" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  </div>
-                </div>
-              {% endif %}
-            </div>
-            {% if sermon.speaker %}<p class="font-body text-xs text-gold-dark mb-1">{{ sermon.speaker.full_name }} · {{ sermon.date_delivered|date:"M j, Y" }}</p>{% endif %}
-            <h3 class="font-heading text-lg text-navy group-hover:text-gold-dark transition-colors">{{ sermon.title }}</h3>
-          </a>
-        {% endfor %}
+                <h3 class="font-heading text-base text-navy group-hover:text-gold-dark transition-colors mb-1">{{ sermon.title }}</h3>
+                <p class="font-body text-xs text-muted">
+                  {% if sermon.speaker %}{{ sermon.speaker.full_name }} · {% endif %}{{ sermon.date_delivered|date:"M j, Y" }}
+                </p>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="font-body text-muted">Teachings coming soon.</p>
+        {% endif %}
       </div>
-      <a href="{% url 'sermons:list' %}" class="block sm:hidden text-center font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors mt-8">
-        View All Teachings →
-      </a>
-    {% else %}
-      <p class="font-body text-navy/50">Teachings coming soon.</p>
-    {% endif %}
+    </div>
   </div>
 </section>

@@ -7,85 +7,73 @@ from apps.events.models import Event
 
 
 def gallery_upload_path(instance, filename):
-    # instance here is a GalleryImage; group files by album for tidier
-    # storage browsing, matching the date-bucketing spirit of §11
-    # without needing actual date logic for what's typically a
-    # bounded, event-driven set of uploads.
-    album_slug = instance.album.slug if instance.album_id else "unsorted"
-    return f"gallery/{album_slug}/{filename}"
+    return f"gallery/{filename}"
 
 
-class GalleryAlbum(models.Model):
+class GalleryPhoto(models.Model):
+    """
+    A single photo on the public Gallery page. Replaces the earlier
+    Album/Image structure (Phase 10) with a flat, individually
+    categorized and publishable model per the Gallery redesign —
+    each photo stands alone, no album grouping or click-through.
+    """
+    CATEGORY_CHOICES = [
+        ("worship", "Worship"),
+        ("community", "Community"),
+        ("events", "Events"),
+        ("ministries", "Ministries"),
+        ("outreach", "Outreach"),
+        ("special_moments", "Special Moments"),
+        ("church_life", "Church Life"),
+        ("bible_studies", "Bible Studies"),
+    ]
+
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True)
-    description = models.TextField(blank=True)
-
-    event = models.ForeignKey(
-        Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="gallery_albums",
-        help_text="Optional — link this album to the event it was taken at.",
+    image = models.ImageField(
+        upload_to=gallery_upload_path,
+        validators=[validate_image_file],
     )
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    alt_text = models.CharField(
+        max_length=255, blank=True,
+        help_text="Describes the image for screen readers. If left blank, the title is used instead.",
+    )
+    event = models.ForeignKey(
+        Event, on_delete=models.SET_NULL, null=True, blank=True, related_name="gallery_photos",
+        help_text="Optional — link this photo to the event it was taken at.",
+    )
+    photo_date = models.DateField(help_text="Date shown on the photo card.")
 
+    is_featured = models.BooleanField(
+        default=False, help_text="Featured photos are prioritized in homepage previews.",
+    )
     is_published = models.BooleanField(default=False)
     order = models.PositiveIntegerField(default=0)
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True,
-        related_name="albums_created",
+        related_name="gallery_photos_created",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["order", "-created_at"]
+        ordering = ["order", "-photo_date"]
 
     def __str__(self):
         return self.title
 
     @property
-    def cover_image(self):
-        """
-        The album's representative thumbnail: the image explicitly
-        marked featured, or failing that, the first image in the
-        album. Avoids needing a separate 'cover_image' upload field
-        that editors would have to remember to set independently of
-        the images they've actually uploaded.
-        """
-        featured = self.images.filter(is_featured=True).first()
-        return featured or self.images.first()
+    def display_alt(self):
+        return self.alt_text or self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
-            while GalleryAlbum.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+            while GalleryPhoto.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 counter += 1
                 slug = f"{base_slug}-{counter}"
             self.slug = slug
         super().save(*args, **kwargs)
-
-
-class GalleryImage(models.Model):
-    album = models.ForeignKey(GalleryAlbum, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(
-        upload_to=gallery_upload_path,
-        validators=[validate_image_file],
-    )
-    caption = models.CharField(max_length=255, blank=True)
-    alt_text = models.CharField(
-        max_length=255, blank=True,
-        help_text="Describes the image for screen readers. If left blank, the caption is used instead.",
-    )
-    is_featured = models.BooleanField(
-        default=False, help_text="Featured images are used as the album cover and in homepage previews.",
-    )
-    order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ["order", "id"]
-
-    def __str__(self):
-        return self.caption or f"Image #{self.pk} in {self.album.title}"
-
-    @property
-    def display_alt(self):
-        return self.alt_text or self.caption or self.album.title

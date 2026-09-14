@@ -67,6 +67,13 @@ class AboutPageContent(SingletonModel):
     there is exactly one About page, but it needs distinct editable
     sections rather than a single free-text body.
     """
+    hero_heading = models.CharField(
+        max_length=200, blank=True, default="A Church for Today, A Family for Life.",
+    )
+    hero_description = models.TextField(
+        blank=True,
+        help_text="Short intro paragraph shown under the hero heading.",
+    )
     hero_image = models.ImageField(
         upload_to=pages_upload_path, blank=True, null=True,
         validators=[validate_image_file],
@@ -77,6 +84,15 @@ class AboutPageContent(SingletonModel):
     our_vision = models.TextField(blank=True)
     our_values = models.TextField(blank=True)
     statement_of_faith = models.TextField(blank=True)
+
+    active_members_count = models.CharField(
+        max_length=20, blank=True,
+        help_text="Shown in the 'Church at a Glance' stats row, e.g. '500+'.",
+    )
+    years_of_impact = models.CharField(
+        max_length=20, blank=True,
+        help_text="Shown in the 'Church at a Glance' stats row, e.g. '5+'.",
+    )
 
     show_leadership_section = models.BooleanField(
         default=True,

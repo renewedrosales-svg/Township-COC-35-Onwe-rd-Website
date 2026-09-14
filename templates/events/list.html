@@ -1,70 +1,163 @@
 {% extends "base.html" %}
-{% block title %}Events - {{ church_settings.church_name }}{% endblock %}
+{% block title %}Events : {{ church_settings.church_name }}{% endblock %}
+{% block meta_description %}From powerful services to life-changing events, there's always something for you and your family.{% endblock %}
 
 {% block content %}
-<section class="bg-navy text-white">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-    <h1 class="font-heading text-4xl sm:text-5xl">Events</h1>
-    <p class="font-body text-white/70 mt-3">Join us - see what's coming up.</p>
+<section class="relative bg-navy text-white overflow-hidden">
+  <div class="absolute inset-0 bg-navy-dark/55"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+    <div class="max-w-2xl">
+      <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4 font-semibold">Upcoming Events</p>
+      <h1 class="font-heading text-4xl sm:text-5xl leading-tight mb-6 font-bold">
+        Be Part of What's <span class="text-gold">Happening</span>
+      </h1>
+      <p class="font-body text-white/80 text-base sm:text-lg">
+        From powerful services to life-changing events, there's always something for you and your family.
+      </p>
+    </div>
   </div>
 </section>
 
-<section class="bg-white">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h2 class="font-heading text-2xl text-navy mb-8">Upcoming Events</h2>
+<section class="bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-    {% if upcoming_events %}
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-        {% for event in upcoming_events %}
-          <a href="{% url 'events:detail' event.slug %}" class="block bg-cream rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-            {% if event.image %}
-              <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy" class="w-full h-44 object-cover">
-            {% else %}
-              <div class="w-full h-44 bg-navy/5 flex items-center justify-center">
-                <span class="font-body text-sm text-navy/40">No image</span>
-              </div>
-            {% endif %}
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="bg-navy text-white rounded px-2.5 py-1 text-center leading-tight">
-                  <p class="font-body text-[10px] uppercase">{{ event.event_date|date:"M" }}</p>
-                  <p class="font-heading text-sm">{{ event.event_date|date:"d" }}</p>
+      <div class="lg:col-span-2 space-y-6">
+        {% if upcoming_events %}
+          {% for event in upcoming_events %}
+            <div class="flex flex-col sm:flex-row gap-5 bg-white rounded-2xl p-5 shadow-sm">
+              <a href="{% url 'events:detail' event.slug %}" class="relative shrink-0 w-full sm:w-40 h-40 rounded-xl overflow-hidden block">
+                {% if event.image %}
+                  <img src="{{ event.image.url }}" alt="{{ event.title }}" loading="lazy" class="w-full h-full object-cover">
+                {% else %}
+                  <div class="w-full h-full bg-navy/5 flex items-center justify-center">
+                    <span class="font-body text-xs text-muted">No image</span>
+                  </div>
+                {% endif %}
+                <div class="absolute top-3 left-3 bg-gold text-navy-dark rounded-lg px-2.5 py-1.5 text-center leading-tight shadow-sm">
+                  <p class="font-body text-[10px] uppercase font-semibold">{{ event.event_date|date:"M" }}</p>
+                  <p class="font-heading text-lg font-bold">{{ event.event_date|date:"d" }}</p>
+                  <p class="font-body text-[9px] uppercase font-semibold">{{ event.event_date|date:"D" }}</p>
                 </div>
-                <p class="font-body text-xs text-navy/50">{{ event.start_time|time:"g:i A" }}</p>
+              </a>
+              <div class="flex-1 min-w-0">
+                {% if event.organizer %}
+                  <p class="font-body text-[11px] uppercase tracking-wide text-gold-dark font-semibold mb-1">{{ event.organizer }}</p>
+                {% endif %}
+                <a href="{% url 'events:detail' event.slug %}">
+                  <h3 class="font-heading text-xl text-navy mb-2 hover:text-gold-dark transition-colors">{{ event.title }}</h3>
+                </a>
+                {% if event.description %}
+                  <p class="font-body text-sm text-black/70 mb-3">{{ event.description|truncatewords:22 }}</p>
+                {% endif %}
+                <div class="flex flex-wrap items-center gap-x-5 gap-y-1 font-body text-xs text-black/60 mb-3">
+                  <span class="flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path stroke-linecap="round" d="M12 7v5l3 3"/></svg>
+                    {{ event.start_time|time:"g:i A" }}{% if event.end_time %} – {{ event.end_time|time:"g:i A" }}{% endif %}
+                  </span>
+                  {% if event.location %}
+                    <span class="flex items-center gap-1.5">
+                      <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/></svg>
+                      {{ event.location }}
+                    </span>
+                  {% endif %}
+                </div>
+                <a href="{% url 'events:ics_download' event.slug %}"
+                   class="inline-flex items-center gap-2 border border-border text-navy font-body text-xs font-semibold px-4 py-2 rounded-xl hover:border-navy transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3 10h18M12 14v4M10 16h4"/></svg>
+                  Add to Calendar
+                </a>
               </div>
-              <h3 class="font-heading text-lg text-navy mb-1">{{ event.title }}</h3>
-              {% if event.location %}<p class="font-body text-sm text-navy/50">{{ event.location }}</p>{% endif %}
             </div>
-          </a>
-        {% endfor %}
+          {% endfor %}
+
+          {% if is_paginated %}
+            <div class="flex justify-center items-center gap-2 pt-6 font-body text-sm">
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-border text-navy hover:border-navy transition-colors">‹</a>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+                <a href="?page={{ num }}"
+                   class="w-9 h-9 flex items-center justify-center rounded-full font-semibold transition-colors
+                          {% if num == page_obj.number %}bg-navy text-white{% else %}bg-white border border-border text-navy hover:border-navy{% endif %}">
+                  {{ num }}
+                </a>
+              {% endfor %}
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="w-9 h-9 flex items-center justify-center rounded-full bg-white border border-border text-navy hover:border-navy transition-colors">›</a>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% else %}
+          <p class="font-body text-black/60 py-12">No upcoming events right now, check back soon.</p>
+        {% endif %}
+
+        {% if past_events %}
+          <div class="pt-8">
+            <h2 class="font-heading text-xl text-navy mb-5">Past Events</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {% for event in past_events %}
+                <a href="{% url 'events:detail' event.slug %}" class="block bg-white border border-border rounded-xl p-4 hover:shadow-sm transition-shadow opacity-80">
+                  <p class="font-body text-xs text-black/50 mb-1">{{ event.event_date|date:"M j, Y" }}</p>
+                  <h3 class="font-heading text-sm text-navy">{{ event.title }}</h3>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
       </div>
 
-      {% if is_paginated %}
-        <div class="flex justify-center gap-4 mb-16 font-body text-sm">
-          {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" class="text-navy hover:text-gold-dark">&larr; Previous</a>
-          {% endif %}
-          <span class="text-navy/50">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-          {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="text-navy hover:text-gold-dark">Next &rarr;</a>
-          {% endif %}
+      <aside class="lg:col-span-1 space-y-6">
+
+        <div class="bg-white rounded-2xl p-5 border border-border">
+          <p class="font-heading text-lg text-navy mb-4">{{ calendar_month_label }}</p>
+          <table class="w-full font-body text-xs text-center">
+            <thead>
+              <tr class="text-muted">
+                <th class="py-1">Sun</th><th class="py-1">Mon</th><th class="py-1">Tue</th>
+                <th class="py-1">Wed</th><th class="py-1">Thu</th><th class="py-1">Fri</th><th class="py-1">Sat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for week in calendar_weeks %}
+                <tr>
+                  {% for day in week %}
+                    <td class="py-1.5">
+                      {% if day != 0 %}
+                        <span class="inline-flex items-center justify-center w-7 h-7 rounded-full
+                                     {% if day == calendar_today_day %}bg-gold text-navy-dark font-semibold
+                                     {% elif day in calendar_event_days %}bg-navy/10 text-navy font-semibold
+                                     {% else %}text-black/70{% endif %}">
+                          {{ day }}
+                        </span>
+                      {% endif %}
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-      {% endif %}
-    {% else %}
-      <p class="font-body text-navy/50 py-6 mb-16">No upcoming events right now — check back soon.</p>
-    {% endif %}
 
-    {% if past_events %}
-      <h2 class="font-heading text-2xl text-navy mb-8">Past Events</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for event in past_events %}
-          <a href="{% url 'events:detail' event.slug %}" class="block bg-white border border-navy/10 rounded-lg p-5 hover:shadow-sm transition-shadow opacity-80">
-            <p class="font-body text-xs text-navy/50 mb-1">{{ event.event_date|date:"M j, Y" }}</p>
-            <h3 class="font-heading text-base text-navy">{{ event.title }}</h3>
-          </a>
-        {% endfor %}
-      </div>
-    {% endif %}
+        <div class="bg-white rounded-2xl p-5 border border-border">
+          <h3 class="font-heading text-base text-navy mb-3">Quick Links</h3>
+          <ul class="font-body text-sm divide-y divide-border">
+            <li><a href="{% url 'events:list' %}" class="flex items-center justify-between py-2.5 text-navy hover:text-gold-dark transition-colors">View All Events <span>›</span></a></li>
+            <li><a href="{% url 'sermons:list' %}" class="flex items-center justify-between py-2.5 text-navy hover:text-gold-dark transition-colors">Sermons <span>›</span></a></li>
+            <li><a href="{% url 'ministries:list' %}" class="flex items-center justify-between py-2.5 text-navy hover:text-gold-dark transition-colors">Ministries <span>›</span></a></li>
+            <li><a href="{% url 'pages:contact' %}" class="flex items-center justify-between py-2.5 text-navy hover:text-gold-dark transition-colors">Plan your Visit <span>›</span></a></li>
+          </ul>
+        </div>
+
+        <div class="bg-navy-dark rounded-2xl p-6 relative overflow-hidden">
+          <svg class="absolute top-4 right-4 w-8 h-8 text-white/10" fill="currentColor" viewBox="0 0 24 24"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <p class="font-body text-white text-base leading-snug mb-3 relative">"I am the vine, you are the branches. Whoever remains in me and I in them will bear much fruit; but apart from me you can do nothing."</p>
+          <p class="font-body text-sm text-white/50 relative">John 15:5</p>
+        </div>
+
+      </aside>
+
+    </div>
   </div>
 </section>
 {% endblock %}

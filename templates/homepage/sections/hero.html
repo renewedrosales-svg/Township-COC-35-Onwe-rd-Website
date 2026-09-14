@@ -1,41 +1,44 @@
 {% load homepage_extras %}
-<section class="relative bg-navy text-white overflow-hidden">
+<section class="relative bg-navy text-white overflow-hidden min-h-140 lg:min-h-150 flex items-center">
   {% if homepage_content.hero_image %}
     <img src="{{ homepage_content.hero_image.url }}" alt=""
-         class="absolute inset-0 w-full h-full object-cover opacity-40">
+         class="absolute inset-0 w-full h-full object-cover">
   {% endif %}
-  <div class="absolute inset-0 bg-linear-to-t from-navy-dark via-navy/70 to-navy/40"></div>
+  <div class="absolute inset-0 bg-navy-dark/70"></div>
+  <div class="absolute inset-0 bg-linear-to-t from-navy-dark/90 via-transparent to-transparent"></div>
 
-  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-32 sm:py-40 text-center">
-    {% if homepage_content.hero_eyebrow %}
-      <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4">
-        {{ homepage_content.hero_eyebrow }}
-      </p>
-    {% endif %}
-
-    <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl leading-tight mb-6">
-      {{ homepage_content.hero_headline|highlight:homepage_content.hero_headline_accent }}
-    </h1>
-
-    {% if homepage_content.hero_description %}
-      <p class="font-body text-white/80 text-base sm:text-lg max-w-2xl mx-auto mb-10">
-        {{ homepage_content.hero_description }}
-      </p>
-    {% endif %}
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-      {% if homepage_content.hero_cta_primary_text %}
-        <a href="{{ homepage_content.hero_cta_primary_url }}"
-           class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3 rounded-full hover:bg-gold-dark transition-colors">
-          {{ homepage_content.hero_cta_primary_text }}
-        </a>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div class="max-w-xl">
+      {% if homepage_content.hero_eyebrow %}
+        <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4 font-semibold">
+          {{ homepage_content.hero_eyebrow }}
+        </p>
       {% endif %}
-      {% if homepage_content.hero_cta_secondary_text %}
-        <a href="{{ homepage_content.hero_cta_secondary_url }}"
-           class="inline-flex items-center gap-2 border border-white/40 text-white font-body font-semibold px-7 py-3 rounded-full hover:bg-white/10 transition-colors">
-          {{ homepage_content.hero_cta_secondary_text }}
-        </a>
+
+      <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl leading-[1.1] mb-6 font-bold">
+        {{ homepage_content.hero_headline|highlight:homepage_content.hero_headline_accent }}
+      </h1>
+
+      {% if homepage_content.hero_description %}
+        <p class="font-body text-white/80 text-base sm:text-lg mb-10">
+          {{ homepage_content.hero_description }}
+        </p>
       {% endif %}
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        {% if homepage_content.hero_cta_primary_text %}
+          <a href="{{ homepage_content.hero_cta_primary_url }}"
+             class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-gold-dark transition-colors">
+            {{ homepage_content.hero_cta_primary_text }} →
+          </a>
+        {% endif %}
+        {% if homepage_content.hero_cta_secondary_text %}
+          <a href="{{ homepage_content.hero_cta_secondary_url }}"
+             class="inline-flex items-center gap-2 border border-white text-white font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-white/10 transition-colors">
+            {{ homepage_content.hero_cta_secondary_text }} ▶
+          </a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </section>

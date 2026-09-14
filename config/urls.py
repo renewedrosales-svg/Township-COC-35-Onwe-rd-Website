@@ -2,27 +2,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
-from apps.core.views import robots_txt
-
-from apps.accounts.views import RateLimitAwareLoginView
-
-from .views import health_check
-from apps.accounts.forms import StyledLoginForm
-
 from django.contrib.sitemaps.views import sitemap
+from django.urls import include, path
 
-from apps.core.views import custom_400, custom_403, custom_404, custom_500
+from apps.accounts.forms import StyledLoginForm
+from apps.accounts.views import RateLimitAwareLoginView
 
 from apps.core.sitemaps import (
     ArticleSitemap,
     EventSitemap,
     FlatPageSitemap,
-    GalleryAlbumSitemap,
+    GalleryPhotoSitemap,
     MinistrySitemap,
     SermonSitemap,
     StaticViewSitemap,
 )
+from apps.core.views import custom_400, custom_403, custom_404, custom_500, robots_txt
+
+from .views import health_check
 
 sitemaps = {
     "static": StaticViewSitemap,
@@ -30,13 +27,14 @@ sitemaps = {
     "teachings": SermonSitemap,
     "events": EventSitemap,
     "news": ArticleSitemap,
-    "gallery": GalleryAlbumSitemap,
+    "gallery": GalleryPhotoSitemap,
     "pages": FlatPageSitemap,
 }
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("health/", health_check, name="health_check"),
+    path("robots.txt", robots_txt, name="robots_txt"),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 
     path("login/", RateLimitAwareLoginView.as_view(template_name="pages/login.html", authentication_form=StyledLoginForm), name="login"),
@@ -52,9 +50,8 @@ urlpatterns = [
     path("gallery/", include("apps.gallery.urls")),
     path("school/", include("apps.school.urls")),
 
+    # pages.urls MUST stay LAST — catch-all "<slug:slug>/" pattern.
     path("", include("apps.pages.urls")),
-
-    path("robots.txt", robots_txt, name="robots_txt"),
 ]
 
 if settings.DEBUG:

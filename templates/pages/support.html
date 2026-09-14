@@ -1,37 +1,100 @@
 {% extends "base.html" %}
-{% block title %}Support the Church - {{ church_settings.church_name }}{% endblock %}
+{% block title %}Support the Church — {{ church_settings.church_name }}{% endblock %}
 {% block meta_description %}Ways to give and support {{ church_settings.church_name }}.{% endblock %}
 
 {% block content %}
-<section class="bg-navy text-white">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-    <h1 class="font-heading text-4xl sm:text-5xl">{{ support_content.heading }}</h1>
+<section class="relative bg-navy text-white overflow-hidden">
+  <div class="absolute inset-0 bg-navy-dark/50"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-24">
+    <div class="max-w-2xl">
+      <p class="font-body text-xs sm:text-sm uppercase tracking-[0.2em] text-gold mb-4 font-semibold">Give</p>
+      <h1 class="font-heading text-4xl sm:text-5xl leading-tight mb-6 font-bold">{{ support_content.heading }}</h1>
+      {% if support_content.intro_text %}
+        <p class="font-body text-white/80 text-base sm:text-lg whitespace-pre-line">{{ support_content.intro_text }}</p>
+      {% endif %}
+    </div>
   </div>
 </section>
 
-<section class="bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    {% if support_content.intro_text %}
-      <p class="font-body text-navy/70 leading-relaxed whitespace-pre-line mb-10">{{ support_content.intro_text }}</p>
-    {% endif %}
+<section class="bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
 
     {% if bank_accounts %}
-      <div class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {% for account in bank_accounts %}
-          <div class="bg-cream rounded-lg p-6">
-            <p class="font-heading text-lg text-navy mb-3">{{ account.label }}</p>
-            <div class="font-body text-sm text-navy/80 space-y-1">
-              <p><strong>Bank:</strong> {{ account.bank_name }}</p>
-              <p><strong>Account Name:</strong> {{ account.account_name }}</p>
-              <p><strong>Account Number:</strong> {{ account.account_number }}</p>
-              {% if account.additional_info %}<p class="text-navy/60 mt-2">{{ account.additional_info }}</p>{% endif %}
+          <div class="bg-white rounded-2xl p-6 shadow-sm" x-data="{ copied: false }">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-11 h-11 rounded-full bg-navy flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/><path stroke-linecap="round" d="M2 10h20"/>
+                </svg>
+              </div>
+              <h3 class="font-heading text-lg text-navy">{{ account.label }}</h3>
+            </div>
+
+            <div class="space-y-3 font-body text-sm">
+              <div class="flex justify-between border-b border-border pb-3">
+                <span class="text-black/50">Bank</span>
+                <span class="text-black/80 font-medium">{{ account.bank_name }}</span>
+              </div>
+              <div class="flex justify-between border-b border-border pb-3">
+                <span class="text-black/50">Account Name</span>
+                <span class="text-black/80 font-medium text-right">{{ account.account_name }}</span>
+              </div>
+              <div class="flex justify-between items-center border-b border-border pb-3">
+                <span class="text-black/50">Account Number</span>
+                <span class="flex items-center gap-2">
+                  <span class="text-black/80 font-semibold tracking-wide">{{ account.account_number }}</span>
+                    <button type="button"
+                      @click="navigator.clipboard.writeText('{{ account.account_number|escapejs }}'); copied = true; setTimeout(() => copied = false, 2000)"
+                      class="text-gold-dark hover:text-navy transition-colors shrink-0"
+                      :aria-label="copied ? 'Copied' : 'Copy account number'">
+                    <svg x-show="!copied" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <rect x="9" y="9" width="11" height="11" rx="2"/><path stroke-linecap="round" d="M5 15V5a2 2 0 0 1 2-2h10"/>
+                    </svg>
+                    <svg x-show="copied" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                  </button>
+                </span>
+              </div>
+              {% if account.additional_info %}
+                <p class="text-black/60 pt-1">{{ account.additional_info }}</p>
+              {% endif %}
             </div>
           </div>
         {% endfor %}
       </div>
     {% else %}
-      <p class="font-body text-navy/50">Giving details coming soon — please contact the church office.</p>
+      <div class="bg-white rounded-2xl p-10 text-center max-w-lg mx-auto">
+        <p class="font-body text-black/60">Giving details coming soon, please contact the church office in the meantime.</p>
+        <a href="{% url 'pages:contact' %}" class="inline-flex items-center gap-2 mt-5 font-body text-sm font-semibold text-navy hover:text-gold-dark transition-colors">
+          Contact Us →
+        </a>
+      </div>
     {% endif %}
+
+  </div>
+</section>
+
+<section class="bg-navy-dark text-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+    <svg class="w-8 h-8 text-gold mx-auto mb-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+    <p class="font-heading text-xl sm:text-2xl leading-snug mb-3">
+      "Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."
+    </p>
+    <p class="font-body text-sm text-white/50">2 Corinthians 9:7</p>
+  </div>
+</section>
+
+<section class="bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 text-center">
+    <h2 class="font-heading text-2xl text-navy mb-3">Questions About Giving?</h2>
+    <p class="font-body text-black/60 mb-6">Reach out to the church office, we're happy to help.</p>
+    <a href="{% url 'pages:contact' %}"
+       class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-gold-dark transition-colors">
+      Contact Us →
+    </a>
   </div>
 </section>
 {% endblock %}

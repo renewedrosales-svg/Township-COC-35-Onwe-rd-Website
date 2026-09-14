@@ -23,6 +23,12 @@ class SEODefaultsForm(TailwindStyledFormMixin, forms.ModelForm):
         fields = ["default_seo_title", "default_seo_description", "default_og_image"]
 
 
+class NotificationSettingsForm(TailwindStyledFormMixin, forms.ModelForm):
+    class Meta:
+        model = ChurchSettings
+        fields = ["notification_email"]
+
+
 class ServiceTimeForm(TailwindStyledFormMixin, forms.ModelForm):
     class Meta:
         model = ServiceTime

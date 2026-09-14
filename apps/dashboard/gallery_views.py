@@ -6,46 +6,35 @@ from apps.core.dashboard_views import (
     DashboardListView,
     DashboardUpdateView,
 )
-from apps.gallery.forms import GalleryAlbumForm
-from apps.gallery.models import GalleryAlbum
+from apps.gallery.forms import GalleryPhotoForm
+from apps.gallery.models import GalleryPhoto
 
 
-class DashboardAlbumListView(DashboardListView):
-    model = GalleryAlbum
+class DashboardGalleryPhotoListView(DashboardListView):
+    model = GalleryPhoto
     template_name = "dashboard/gallery/list.html"
-    context_object_name = "albums"
+    context_object_name = "photos"
 
     def get_queryset(self):
-        return GalleryAlbum.objects.select_related("event").prefetch_related("images").order_by("order", "-created_at")
+        return GalleryPhoto.objects.order_by("order", "-photo_date")
 
 
-class DashboardAlbumCreateView(DashboardCreateView):
-    model = GalleryAlbum
-    form_class = GalleryAlbumForm
-    success_url = reverse_lazy("dashboard:album_list")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["admin_hint"] = True
-        return context
+class DashboardGalleryPhotoCreateView(DashboardCreateView):
+    model = GalleryPhoto
+    form_class = GalleryPhotoForm
+    success_url = reverse_lazy("dashboard:gallery_photo_list")
 
 
-class DashboardAlbumUpdateView(DashboardUpdateView):
-    model = GalleryAlbum
-    form_class = GalleryAlbumForm
-    success_url = reverse_lazy("dashboard:album_list")
+class DashboardGalleryPhotoUpdateView(DashboardUpdateView):
+    model = GalleryPhoto
+    form_class = GalleryPhotoForm
+    success_url = reverse_lazy("dashboard:gallery_photo_list")
     slug_field = "slug"
     slug_url_kwarg = "slug"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["admin_hint"] = True
-        context["admin_edit_url"] = f"/admin/gallery/galleryalbum/{self.object.pk}/change/"
-        return context
 
-
-class DashboardAlbumDeleteView(DashboardDeleteView):
-    model = GalleryAlbum
-    success_url = reverse_lazy("dashboard:album_list")
+class DashboardGalleryPhotoDeleteView(DashboardDeleteView):
+    model = GalleryPhoto
+    success_url = reverse_lazy("dashboard:gallery_photo_list")
     slug_field = "slug"
     slug_url_kwarg = "slug"

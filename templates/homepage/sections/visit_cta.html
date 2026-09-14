@@ -1,19 +1,27 @@
-<section id="visit" class="relative bg-navy-dark text-white">
+<section id="visit" class="relative bg-navy-dark text-white overflow-hidden">
   {% if homepage_content.visit_cta_image %}
     <img src="{{ homepage_content.visit_cta_image.url }}" alt=""
-         class="absolute inset-0 w-full h-full object-cover opacity-25">
+         class="absolute inset-0 w-full h-full object-cover opacity-30">
   {% endif %}
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col sm:flex-row items-center justify-between gap-8">
-    <div class="text-center sm:text-left">
-      <h2 class="font-heading text-2xl sm:text-3xl mb-2">{{ homepage_content.visit_cta_heading }}</h2>
-      {% if homepage_content.visit_cta_description %}
-        <p class="font-body text-white/70">{{ homepage_content.visit_cta_description }}</p>
-      {% endif %}
+  <div class="absolute inset-0 bg-navy-dark/70"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 flex flex-col sm:flex-row items-center justify-between gap-8">
+    <div class="flex items-center gap-5 text-center sm:text-left">
+      <div class="hidden sm:flex w-14 h-14 rounded-full bg-white/10 items-center justify-center shrink-0">
+        <svg class="w-6 h-6 text-gold" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/>
+        </svg>
+      </div>
+      <div>
+        <h2 class="font-heading text-2xl sm:text-3xl mb-2">{{ homepage_content.visit_cta_heading }}</h2>
+        {% if homepage_content.visit_cta_description %}
+          <p class="font-body text-white/70">{{ homepage_content.visit_cta_description }}</p>
+        {% endif %}
+      </div>
     </div>
     {% if homepage_content.visit_cta_button_text %}
       <a href="{{ homepage_content.visit_cta_button_url }}"
-         class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3 rounded-full hover:bg-gold-dark transition-colors whitespace-nowrap">
-        {{ homepage_content.visit_cta_button_text }}
+         class="inline-flex items-center gap-2 bg-gold text-navy-dark font-body font-semibold px-7 py-3.5 rounded-xl hover:bg-gold-dark transition-colors whitespace-nowrap">
+        {{ homepage_content.visit_cta_button_text }} →
       </a>
     {% endif %}
   </div>

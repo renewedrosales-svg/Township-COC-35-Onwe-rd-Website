@@ -1,4 +1,4 @@
-from django.core.paginator import Paginator
+from django.db.models import Count, Q
 from django.views.generic import DetailView, ListView
 
 from .models import Sermon, SermonCategory
@@ -15,7 +15,6 @@ class TeachingListView(ListView):
 
         query = self.request.GET.get("q", "").strip()
         if query:
-            from django.db.models import Q
             qs = qs.filter(
                 Q(title__icontains=query)
                 | Q(scripture_reference__icontains=query)
@@ -30,7 +29,16 @@ class TeachingListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = SermonCategory.objects.all()
+        # annotate() computes each category's PUBLISHED sermon count in
+        # one query (not one query per category in a template loop),
+        # matching the project's established select_related/no-N+1
+        # discipline. Filtered on sermon__is_published so a category
+        # with only drafts correctly shows 0, not a misleading count
+        # of unpublished content.
+        context["categories"] = SermonCategory.objects.annotate(
+            sermon_count=Count("sermons", filter=Q(sermons__is_published=True))
+        )
+        context["total_sermon_count"] = Sermon.objects.filter(is_published=True).count()
         context["current_query"] = self.request.GET.get("q", "")
         context["current_category"] = self.request.GET.get("category", "")
         return context

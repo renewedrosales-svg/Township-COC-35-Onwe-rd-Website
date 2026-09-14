@@ -28,14 +28,13 @@ GROUP_PERMISSIONS = {
         "sermons.add_sermoncategory", "sermons.change_sermoncategory", "sermons.delete_sermoncategory",
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
         "events.add_event", "events.change_event", "events.delete_event", "news.add_newscategory", "news.change_newscategory", "news.delete_newscategory",
-    "news.add_article", "news.change_article", "news.delete_article",
-    "gallery.add_galleryalbum", "gallery.change_galleryalbum", "gallery.delete_galleryalbum",
-    "gallery.add_galleryimage", "gallery.change_galleryimage", "gallery.delete_galleryimage",
-    "pages.change_contactmessage", "pages.delete_contactmessage",
-    "pages.change_supportpagecontent",
-    "pages.add_bankaccount", "pages.change_bankaccount", "pages.delete_bankaccount",
-    "school.change_schoolinfo",
-    ],
+        "news.add_article", "news.change_article", "news.delete_article",
+        "gallery.add_galleryphoto", "gallery.change_galleryphoto", "gallery.delete_galleryphoto",
+        "pages.change_contactmessage", "pages.delete_contactmessage",
+        "pages.change_supportpagecontent",
+        "pages.add_bankaccount", "pages.change_bankaccount", "pages.delete_bankaccount",
+        "school.change_schoolinfo",
+        ],
 
     "Church Admin": [
         "church_settings.change_churchsettings",
@@ -50,8 +49,7 @@ GROUP_PERMISSIONS = {
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
         "events.add_event", "events.change_event", "events.delete_event", "news.add_newscategory", "news.change_newscategory", "news.delete_newscategory",
         "news.add_article", "news.change_article", "news.delete_article",
-        "gallery.add_galleryalbum", "gallery.change_galleryalbum", "gallery.delete_galleryalbum",
-        "gallery.add_galleryimage", "gallery.change_galleryimage", "gallery.delete_galleryimage",
+        "gallery.add_galleryphoto", "gallery.change_galleryphoto", "gallery.delete_galleryphoto",
         "pages.change_contactmessage", "pages.delete_contactmessage",
     ],
 
@@ -64,7 +62,6 @@ GROUP_PERMISSIONS = {
         "sermons.add_sermon", "sermons.change_sermon", "sermons.delete_sermon",
     ],
 }
-
 
 class Command(BaseCommand):
     help = "Creates or updates the Super Admin, Church Admin, and Minister groups and their permissions."

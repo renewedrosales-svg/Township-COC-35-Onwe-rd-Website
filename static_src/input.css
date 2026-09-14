@@ -20,12 +20,35 @@
 }
 
 @theme {
-  --color-navy: #0f1f3d;
-  --color-navy-dark: #0a1529;
+  --color-navy: #061b33;
+  --color-navy-dark: #031426;
   --color-navy-light: #1c3357;
-  --color-gold: #c9a24b;
-  --color-gold-dark: #a8843a;
-  --color-cream: #faf8f3;
+  --color-gold: #f5b82e;
+  --color-gold-dark: #e0a420;
+  --color-gold-bright: #ffbe2e;
+  --color-cream: #f8f7f2;
+
+  --color-muted: #667085;
+  --color-border: #e4e7ec;
+  --color-light-gray: #f1f3f5;
+
+  /* Secondary accents for tags, category badges, card variety */
+  --color-teal: #2f6f68;
+  --color-teal-light: #e7f2f0;
+  --color-terracotta: #b5563c;
+  --color-terracotta-light: #f7e9e5;
+
+  /* Semantic status colors, replacing raw green and red Tailwind defaults */
+  --color-success: #1e7a4c;
+  --color-success-light: #e6f4ec;
+  --color-warning: #a86c00;
+  --color-warning-light: #fdf3e0;
+  --color-error: #c0392b;
+  --color-error-light: #fbe9e7;
+
+  /* True neutral gray for borders/dividers, distinct from navy opacity */
+  --color-neutral: #6b7280;
+  --color-neutral-light: #f3f4f6;
 
   --font-heading: "Playfair Display", Georgia, serif;
   --font-body: "Inter", -apple-system, sans-serif;
@@ -35,12 +58,12 @@
    CENTRAL FONT-SIZE CONTROL
 
    Change ONLY --app-base-font-size below to scale text size across
-   the ENTIRE system — every dashboard, form, and table — proportionally.
+   the ENTIRE system, every dashboard, form, and table, proportionally.
    Every Tailwind text utility (text-sm, text-base, text-xl, etc.) is
    defined in rem units, always relative to this root value, so this
    one line is the single source of truth.
 
-   Do NOT set font-size in px directly in any template or component —
+   Do NOT set font-size in px directly in any template or component,
    doing so opts that element out of this central control. Always use
    Tailwind's text-* utility classes, which stay rem-based and will
    automatically respect this setting.
@@ -58,10 +81,10 @@ html {
 }
 
 /* Visible keyboard focus on every interactive element site-wide.
-   Applies automatically to every link/button/input in every template
-   — no per-element focus classes needed except where a component
-   wants a custom focus treatment (e.g. the Support button already
-   has its own focus-visible ring, which this rule doesn't override). */
+   Applies automatically to every link/button/input in every template,
+   no per-element focus classes needed except where a component wants
+   a custom focus treatment (the Support button has its own ring,
+   which this rule doesn't override). */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -74,8 +97,8 @@ select:focus-visible {
 
 /* Respect the OS-level "reduce motion" accessibility setting.
    Overrides every transition/animation duration to near-zero for
-   users who've asked for it — hover scales, the lightbox fade,
-   mobile menu slide, all become instant instead of animated. */
+   users who've asked for it, hover scales, the lightbox fade, mobile
+   menu slide all become instant instead of animated. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
